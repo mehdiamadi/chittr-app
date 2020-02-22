@@ -29,9 +29,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "2D02E47A1E0B4A5D006451C7"
-               BuildableName = "ChitterApp-tvOS.app"
-               BlueprintName = "ChitterApp-tvOS"
-               ReferencedContainer = "container:ChitterApp.xcodeproj">
+               BuildableName = "chitterapp-tvOS.app"
+               BlueprintName = "chitterapp-tvOS"
+               ReferencedContainer = "container:chitterapp.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -43,9 +43,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "2D02E48F1E0B4A5D006451C7"
-               BuildableName = "ChitterApp-tvOSTests.xctest"
-               BlueprintName = "ChitterApp-tvOSTests"
-               ReferencedContainer = "container:ChitterApp.xcodeproj">
+               BuildableName = "chitterapp-tvOSTests.xctest"
+               BlueprintName = "chitterapp-tvOSTests"
+               ReferencedContainer = "container:chitterapp.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -61,9 +61,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "2D02E48F1E0B4A5D006451C7"
-               BuildableName = "ChitterApp-tvOSTests.xctest"
-               BlueprintName = "ChitterApp-tvOSTests"
-               ReferencedContainer = "container:ChitterApp.xcodeproj">
+               BuildableName = "chitterapp-tvOSTests.xctest"
+               BlueprintName = "chitterapp-tvOSTests"
+               ReferencedContainer = "container:chitterapp.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -71,9 +71,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2D02E47A1E0B4A5D006451C7"
-            BuildableName = "ChitterApp-tvOS.app"
-            BlueprintName = "ChitterApp-tvOS"
-            ReferencedContainer = "container:ChitterApp.xcodeproj">
+            BuildableName = "chitterapp-tvOS.app"
+            BlueprintName = "chitterapp-tvOS"
+            ReferencedContainer = "container:chitterapp.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -94,9 +94,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2D02E47A1E0B4A5D006451C7"
-            BuildableName = "ChitterApp-tvOS.app"
-            BlueprintName = "ChitterApp-tvOS"
-            ReferencedContainer = "container:ChitterApp.xcodeproj">
+            BuildableName = "chitterapp-tvOS.app"
+            BlueprintName = "chitterapp-tvOS"
+            ReferencedContainer = "container:chitterapp.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -113,9 +113,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2D02E47A1E0B4A5D006451C7"
-            BuildableName = "ChitterApp-tvOS.app"
-            BlueprintName = "ChitterApp-tvOS"
-            ReferencedContainer = "container:ChitterApp.xcodeproj">
+            BuildableName = "chitterapp-tvOS.app"
+            BlueprintName = "chitterapp-tvOS"
+            ReferencedContainer = "container:chitterapp.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
