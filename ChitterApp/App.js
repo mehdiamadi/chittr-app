@@ -1,33 +1,56 @@
-import * as React from 'react';
-import { Text, View } from 'react-native';
+import React, { Component } from 'react';
+import { FlatList, ActivityIndicator, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-
-function HomeScreen() {
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Home!</Text>
-    </View>
-  );
-}
-
-function SettingsScreen() {
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Settings!</Text>
-    </View>
-  );
-}
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import HomeScreen from './screens/HomeScreen';
+import CreateChitScreen from './screens/CreateChitScreen';
+import SearchScreen from './screens/SearchScreen';
 
 const Tab = createBottomTabNavigator();
+const Drawer = createDrawerNavigator();
 
-export default function ChitterApp() {
-  return (
-    <NavigationContainer>
-      <Tab.Navigator>
-        <Tab.Screen name="Home" component={HomeScreen} />
-        <Tab.Screen name="Settings" component={SettingsScreen} />
-      </Tab.Navigator>
-    </NavigationContainer>
-  );
+export default function App() {
+	return (
+		<NavigationContainer>
+			<Drawer.Navigator initialRouteName="Home">
+				<Drawer.Screen name="Home" component={AppTabNav} />
+			</Drawer.Navigator>
+		</NavigationContainer>
+	);
+}
+
+function AppTabNav() {
+	return (
+		<Tab.Navigator>
+			<Tab.Screen
+				options={{
+					tabBarIcon: ({ color }) => <Icon
+						name="home"
+						size={30}
+						color={color} />
+				}}
+				name="Home" component={HomeScreen}
+			/>
+			<Tab.Screen
+				options={{
+					tabBarIcon: ({ color }) => <Icon
+						name="plus"
+						size={30}
+						color={color} />
+				}}
+				name="Post" component={CreateChitScreen}
+			/>
+			<Tab.Screen
+				options={{
+					tabBarIcon: ({ color }) => <Icon
+						name="search"
+						size={30}
+						color={color} />
+				}}
+				name="Search" component={SearchScreen}
+			/>
+		</Tab.Navigator>
+	)
 }
