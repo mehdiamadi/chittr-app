@@ -5,7 +5,7 @@ class CreateChitScreen extends Component{
 	render(){
 		return(
 			<View>
-				<Text>Search Screen</Text>
+				<Text>Post Screen</Text>
 			</View>
 		);
 	}
