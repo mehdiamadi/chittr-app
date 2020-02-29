@@ -5,14 +5,6 @@ import LoginScreen from './LoginScreen';
 
 const Stack = createStackNavigator();
 
-function HomeStackNav() {
-	return (
-		<Stack.Navigator>
-			<Stack.Screen name="Login" component={LoginScreen} />
-		</Stack.Navigator>
-	);
-}
-
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
@@ -62,20 +54,6 @@ export default class HomeScreen extends Component {
 			)
 		}
 		return (
-			<Stack.Navigator>
-				<Stack.Screen name="Login" component={LoginScreen} 
-				options = {{
-					headerRight: () => (
-						<Button
-						  onPress={() => alert('This is a button!')}
-						  title="Info"
-						  color="#fff"
-						/>
-					  ),
-				}}
-				/>
-			</Stack.Navigator>,
-
 			<View style={styles.container}>
 				<ScrollView>
 					{this.state.shoppingListData.map((item) => {

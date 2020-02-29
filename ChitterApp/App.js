@@ -1,12 +1,17 @@
 import React, { Component } from 'react';
+import { Button } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createDrawerNavigator } from '@react-navigation/drawer';
+import { createStackNavigator } from '@react-navigation/stack';
+
 import Icon from 'react-native-vector-icons/FontAwesome';
+
 import HomeScreen from './screens/HomeScreen';
 import CreateChitScreen from './screens/CreateChitScreen';
 import SearchScreen from './screens/SearchScreen';
-import { createStackNavigator } from '@react-navigation/stack';
+import LoginScreen from './screens/LoginScreen'
+import SignUpScreen from './screens/SignUpScreen';
 
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
@@ -18,18 +23,18 @@ export default function ChitterApp() {
 	)
 }
 
-function AppStackNav({ navigation }) {
+function AppStackNav() {
 	return (
 		<Stack.Navigator>
 			<Stack.Screen
+				name="Home"
 				component={AppTabNav}
-				name = "Home"
 				options={{
-					headerLeft: () => (
-						<Icon style={{ paddingLeft: 10 }} name="bars" size={30} onPress={() => navigation.openDrawer()} />
-					)
+					headerShown: false,
 				}}
 			/>
+			<Stack.Screen name="Sign In" component={LoginScreen} />
+			<Stack.Screen name="Sign Up" component={SignUpScreen} />
 		</Stack.Navigator>
 	)
 }
@@ -45,6 +50,53 @@ function AppDrawerNav() {
 	);
 }
 
+function HomeStackNav({ navigation }) {
+	return (
+		<Stack.Navigator>
+			<Stack.Screen name="Home" component={HomeScreen}
+				options={{
+					headerLeft: () => (
+						<Icon style={{ paddingLeft: 10 }} name="bars" size={30} onPress={() => navigation.openDrawer()} />
+					),
+					headerRight: () => (
+						<Button
+							onPress={() => navigation.navigate('Sign In')}
+							title="Sign In"
+							color="lightgrey"
+						/>
+					),
+				}}
+			/>
+		</Stack.Navigator>
+	);
+}
+
+function PostChitStackNav({ navigation }) {
+	return (
+		<Stack.Navigator>
+			<Stack.Screen name="Post" component={CreateChitScreen}
+				options={{
+					headerLeft: () => (
+						<Icon style={{ paddingLeft: 10 }} name="bars" size={30} onPress={() => navigation.openDrawer()} />
+					),
+				}} />
+		</Stack.Navigator>
+	);
+}
+
+function SearchStackNav({ navigation }) {
+	return (
+		<Stack.Navigator>
+			<Stack.Screen name="Search" component={SearchScreen}
+				options={{
+					headerLeft: () => (
+						<Icon style={{ paddingLeft: 10 }} name="bars" size={30} onPress={() => navigation.openDrawer()} />
+					),
+				}} />
+		</Stack.Navigator>
+	);
+}
+
 function AppTabNav() {
 	return (
 		<Tab.Navigator>
@@ -55,7 +107,7 @@ function AppTabNav() {
 						size={30}
 						color={color} />
 				}}
-				name="Home" component={HomeScreen}
+				name="Home" component={HomeStackNav}
 			/>
 			<Tab.Screen
 				options={{
@@ -64,7 +116,7 @@ function AppTabNav() {
 						size={30}
 						color={color} />
 				}}
-				name="Post" component={CreateChitScreen}
+				name="Post" component={PostChitStackNav}
 			/>
 			<Tab.Screen
 				options={{
@@ -73,7 +125,7 @@ function AppTabNav() {
 						size={30}
 						color={color} />
 				}}
-				name="Search" component={SearchScreen}
+				name="Search" component={SearchStackNav}
 			/>
 		</Tab.Navigator>
 	)

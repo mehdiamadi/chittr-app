@@ -1,33 +1,29 @@
 import React, { Component } from 'react';
 import { Text, TextInput, View, Button, StyleSheet, Alert } from 'react-native';
 
-class LoginScreen extends Component {
+class SignUpScreen extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
+			given_name: '',
+			family_name: '',
 			email: '',
 			password: '',
-			token: '',
-		}
+		};
 	}
-
-	login() {
-		return fetch("http://10.0.2.2:3333/api/v0.0.5/login",
+	signup() {
+		return fetch("http://10.0.2.2:3333/api/v0.0.5/user",
 			{
 				method: 'POST',
-				headers: {
-					Accept: 'application/json',
-					'Content-Type': 'application/json',
-				},
 				body: JSON.stringify({
+					given_name: this.state.given_name,
+					family_name: this.state.family_name,
 					email: this.state.email,
 					password: this.state.password,
 				})
 			})
-			.then((response) => response.json())
-			.then((responseJson) => {
-				this.state.token = responseJson.token;
-				Alert.alert(this.state.token);
+			.then((response) => {
+				Alert.alert();
 			})
 			.catch((error) => {
 				console.error(error);
@@ -39,23 +35,30 @@ class LoginScreen extends Component {
 			<View style={{ padding: 10 }} >
 				<TextInput
 					style={{ height: 40 }}
+					placeholder="given_name"
+					onChangeText={(given_name) => this.setState({ given_name })}
+					value={this.state.given_name}
+				/>
+				<TextInput
+					style={{ height: 40 }}
+					placeholder="family_name"
+					onChangeText={(family_name) => this.setState({ family_name })}
+					value={this.state.family_name}
+				/>
+				<TextInput
+					style={{ height: 40 }}
 					placeholder="email"
 					onChangeText={(email) => this.setState({ email })}
 					value={this.state.email}
 				/>
 				<TextInput
-					style={{ height: 60 }}
+					style={{ height: 40 }}
 					placeholder="password"
 					onChangeText={(password) => this.setState({ password })}
 					value={this.state.password}
 				/>
 				<Button
-					onPress={() => this.login()}
-					title="Sign In"
-				//color="lightgrey"
-				/>
-				<Button
-					onPress={() =>  this.props.navigation.navigate('Sign Up')}
+					onPress={() => this.signup()}
 					title="Sign Up"
 				/>
 			</View >
@@ -65,4 +68,4 @@ class LoginScreen extends Component {
 const styles = StyleSheet.create({
 });
 
-export default LoginScreen
+export default SignUpScreen
