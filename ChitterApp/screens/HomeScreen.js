@@ -1,14 +1,12 @@
 import React, { Component } from 'react';
-import { ScrollView, ActivityIndicator, Text, View, StyleSheet, Button } from 'react-native';
+import { ScrollView, ActivityIndicator, Text, View, StyleSheet } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
-import LoginScreen from './LoginScreen';
 
 const Stack = createStackNavigator();
 
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: 'lightgrey',
 	},
 	item: {
 		marginTop: 12,
@@ -63,7 +61,6 @@ export default class HomeScreen extends Component {
 							</View>
 						)
 					})}
-
 				</ScrollView>
 			</View>
 		);

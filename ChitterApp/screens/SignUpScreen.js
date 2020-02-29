@@ -15,6 +15,10 @@ class SignUpScreen extends Component {
 		return fetch("http://10.0.2.2:3333/api/v0.0.5/user",
 			{
 				method: 'POST',
+				headers: {
+					Accept: 'application/json',
+					'Content-Type': 'application/json',
+				},
 				body: JSON.stringify({
 					given_name: this.state.given_name,
 					family_name: this.state.family_name,
