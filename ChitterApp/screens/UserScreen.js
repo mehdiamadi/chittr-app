@@ -1,17 +1,24 @@
 import React, { Component } from 'react';
-import { ActivityIndicator, Text, View, StyleSheet, Alert, ScrollView, TouchableOpacity } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
+import { ActivityIndicator, Text, View, StyleSheet, Alert, ScrollView, TouchableOpacity, Image } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+        flex: 0,
+        alignItems: 'center',
+        justifyContent: 'flex-start',
+        flexShrink: 1,
     },
     item: {
         marginTop: 12,
         padding: 30,
         backgroundColor: 'white',
         fontSize: 18,
+    },
+    photo: {
+        width: 100,
+        height: 100,
+        alignItems: 'center',
     },
 });
 
@@ -24,12 +31,12 @@ function FollowersScreen({ route }) {
                     return (
                         <View key={item.user_id}>
                             <TouchableOpacity
-                                // onPress={() => {
-                                //     this.props.navigation.navigate('User', {
-                                //         userID: item.user_id,
-                                //     });
-                                // }}
-                                >
+                            // onPress={() => {
+                            //     this.props.navigation.navigate('User', {
+                            //         userID: item.user_id,
+                            //     });
+                            // }}
+                            >
                                 <View style={styles.item}>
                                     <Text>{item.given_name}</Text>
                                 </View>
@@ -51,12 +58,12 @@ function FollowingScreen({ route }) {
                     return (
                         <View key={item.user_id}>
                             <TouchableOpacity
-                                // onPress={() => {
-                                //     this.props.navigation.navigate('User', {
-                                //         userID: item.user_id,
-                                //     });
-                                // }}
-                                >
+                            // onPress={() => {
+                            //     this.props.navigation.navigate('User', {
+                            //         userID: item.user_id,
+                            //     });
+                            // }}
+                            >
                                 <View style={styles.item}>
                                     <Text>{item.given_name}</Text>
                                 </View>
@@ -79,7 +86,8 @@ export default class UserScreen extends Component {
             userID: '',
             given_name: '',
             followers: [],
-            following: []
+            following: [],
+            photo: '',
         }
     }
 
@@ -125,8 +133,22 @@ export default class UserScreen extends Component {
             });
     }
 
+    getPhoto(userID) {
+        return fetch('http://10.0.2.2:3333/api/v0.0.5/user/' + userID + '/photo')
+            .then((response) => {
+                this.setState({
+                    isLoading: false,
+                    photo: response,
+                });
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
+
     componentDidMount() {
         const { userID } = this.props.route.params;
+        this.state.userID = userID;
         this.getUser(userID);
         this.getFollowers(userID);
         this.getFollowing(userID);
@@ -141,10 +163,20 @@ export default class UserScreen extends Component {
             )
         }
         return (
-            <Tab.Navigator>
-                <Tab.Screen name="Followers" component={FollowersScreen} initialParams={{ followersData: this.state.followers }} />
-                <Tab.Screen name="Following" component={FollowingScreen} initialParams={{ followingData: this.state.following }} />
-            </Tab.Navigator>
+            <React.Fragment>
+                <View style={styles.container}>
+                    <Text>{this.state.given_name}</Text>
+
+                    <Image
+                        source={{ uri: 'http://10.0.2.2:3333/api/v0.0.5/user/' + this.state.userID + '/photo' }}
+                        style={styles.photo} />
+                </View>
+
+                <Tab.Navigator>
+                    <Tab.Screen name="Followers" component={FollowersScreen} initialParams={{ followersData: this.state.followers }} />
+                    <Tab.Screen name="Following" component={FollowingScreen} initialParams={{ followingData: this.state.following }} />
+                </Tab.Navigator>
+            </React.Fragment>
         );
     }
 }
