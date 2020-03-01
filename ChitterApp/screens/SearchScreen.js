@@ -1,5 +1,18 @@
 import React, { Component } from 'react';
-import { Text, View, ActivityIndicator, TextInput, Button, ScrollView, StyleSheet } from 'react-native';
+import { Text, View, ActivityIndicator, TextInput, Button, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
+
+const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+		backgroundColor: 'lightgrey',
+	},
+	item: {
+		marginTop: 12,
+		padding: 30,
+		backgroundColor: 'white',
+		fontSize: 18,
+	},
+});
 
 class SearchScreen extends Component {
 	constructor(props) {
@@ -11,7 +24,7 @@ class SearchScreen extends Component {
 	}
 
 	searchUser() {
-		return fetch('http://10.0.2.2:3333/api/v0.0.5/search_user?q='+this.state.username)
+		return fetch('http://10.0.2.2:3333/api/v0.0.5/search_user?q=' + this.state.username)
 			.then((response) => response.json())
 			.then((responseJson) => {
 				this.setState({
@@ -48,7 +61,16 @@ class SearchScreen extends Component {
 					{this.state.usernames.map((item) => {
 						return (
 							<View key={item.user_id}>
-								<Text style={styles.item}>{item.given_name}</Text>
+								<TouchableOpacity
+									onPress={() => {
+										this.props.navigation.navigate('User', {
+											userID: item.user_id,
+										});
+									}}>
+									<View style={styles.item}>
+										<Text>{item.given_name}</Text>
+									</View>
+								</TouchableOpacity>
 							</View>
 						)
 					})}
@@ -57,17 +79,4 @@ class SearchScreen extends Component {
 		);
 	}
 }
-
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		backgroundColor: 'lightgrey',
-	},
-	item: {
-		marginTop: 12,
-		padding: 30,
-		backgroundColor: 'white',
-		fontSize: 18,
-	},
-});
 export default SearchScreen;

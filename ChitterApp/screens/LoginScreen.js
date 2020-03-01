@@ -26,7 +26,9 @@ class LoginScreen extends Component {
 			})
 			.then((response) => response.json())
 			.then((responseJson) => {
-				this.state.token = responseJson.token;
+				this.setState({
+                    token: responseJson.token,
+				});
 				Alert.alert(this.state.token);
 			})
 			.catch((error) => {

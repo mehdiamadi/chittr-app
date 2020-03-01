@@ -12,6 +12,7 @@ import CreateChitScreen from './screens/CreateChitScreen';
 import SearchScreen from './screens/SearchScreen';
 import LoginScreen from './screens/LoginScreen'
 import SignUpScreen from './screens/SignUpScreen';
+import UserScreen from './screens/UserScreen';
 
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
@@ -35,6 +36,7 @@ function AppStackNav() {
 			/>
 			<Stack.Screen name="Sign In" component={LoginScreen} />
 			<Stack.Screen name="Sign Up" component={SignUpScreen} />
+			<Stack.Screen name="User" component={UserScreen} />
 		</Stack.Navigator>
 	)
 }

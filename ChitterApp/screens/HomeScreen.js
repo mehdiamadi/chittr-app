@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
 import { ScrollView, ActivityIndicator, Text, View, StyleSheet } from 'react-native';
-import { createStackNavigator } from '@react-navigation/stack';
-
-const Stack = createStackNavigator();
 
 const styles = StyleSheet.create({
 	container: {

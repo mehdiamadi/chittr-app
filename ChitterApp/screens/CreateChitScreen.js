@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View } from 'react-native';
+import { Text, View, TextInput, Button } from 'react-native';
 
 class CreateChitScreen extends Component{
 	constructor(props) {
