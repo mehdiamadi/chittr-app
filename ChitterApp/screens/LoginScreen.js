@@ -27,7 +27,7 @@ class LoginScreen extends Component {
 			.then((response) => response.json())
 			.then((responseJson) => {
 				this.setState({
-                    token: responseJson.token,
+					token: responseJson.token,
 				});
 				Alert.alert(this.state.token);
 			})
@@ -50,6 +50,7 @@ class LoginScreen extends Component {
 					placeholder="password"
 					onChangeText={(password) => this.setState({ password })}
 					value={this.state.password}
+					secureTextEntry
 				/>
 				<Button
 					onPress={() => this.login()}
@@ -57,7 +58,7 @@ class LoginScreen extends Component {
 				//color="lightgrey"
 				/>
 				<Button
-					onPress={() =>  this.props.navigation.navigate('Sign Up')}
+					onPress={() => this.props.navigation.navigate('Sign Up')}
 					title="Sign Up"
 				/>
 			</View >

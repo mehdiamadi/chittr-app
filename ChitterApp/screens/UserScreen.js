@@ -96,7 +96,6 @@ export default class UserScreen extends Component {
             .then((response) => response.json())
             .then((responseJson) => {
                 this.setState({
-                    isLoading: false,
                     given_name: responseJson.given_name,
                 });
             })
@@ -110,7 +109,6 @@ export default class UserScreen extends Component {
             .then((response) => response.json())
             .then((responseJson) => {
                 this.setState({
-                    isLoading: false,
                     followers: responseJson,
                 });
             })
@@ -126,19 +124,6 @@ export default class UserScreen extends Component {
                 this.setState({
                     isLoading: false,
                     following: responseJson,
-                });
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    }
-
-    getPhoto(userID) {
-        return fetch('http://10.0.2.2:3333/api/v0.0.5/user/' + userID + '/photo')
-            .then((response) => {
-                this.setState({
-                    isLoading: false,
-                    photo: response,
                 });
             })
             .catch((error) => {
@@ -173,8 +158,8 @@ export default class UserScreen extends Component {
                 </View>
 
                 <Tab.Navigator>
-                    <Tab.Screen name="Followers" component={FollowersScreen} initialParams={{ followersData: this.state.followers }} />
-                    <Tab.Screen name="Following" component={FollowingScreen} initialParams={{ followingData: this.state.following }} />
+                    <Tab.Screen name="Followers" component={FollowersScreen} initialParams={{ followersData: this.state.followers }} lazy={true}/>
+                    <Tab.Screen name="Following" component={FollowingScreen} initialParams={{ followingData: this.state.following }} lazy={true}/>
                 </Tab.Navigator>
             </React.Fragment>
         );
