@@ -19,6 +19,7 @@ import { AuthContext } from './Context';
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
+var loggedIn = false;
 
 export default function ChittrApp() {
 	const [isLoading, setIsLoading] = React.useState(true);
@@ -29,7 +30,7 @@ export default function ChittrApp() {
 			signIn: (token) => {
 				setIsLoading(false);
 				setUserToken(token);
-				AsyncStorage.setItem("token", token);
+				loggedIn = true;
 			},
 			signUp: () => {
 				setIsLoading(false);
@@ -51,28 +52,6 @@ export default function ChittrApp() {
 	if (isLoading) {
 		return <SplashScreen />;
 	}
-
-	// return (
-	// 	<AuthContext.Provider value={authContext}>
-	// 		<NavigationContainer>
-	// 			<Stack.Navigator>
-	// 				{userToken == null ? (
-	// 					// No token found, user isn't signed in
-	// 					<Stack.Screen
-	// 						name="SignIn"
-	// 						component={LoginScreen}
-	// 						options={{
-	// 							title: 'Sign in',
-	// 						}}
-	// 					/>
-	// 				) : (
-	// 						// User is signed in
-	// 						<Stack.Screen name="Home" component={HomeScreen} />
-	// 					)}
-	// 			</Stack.Navigator>
-	// 		</NavigationContainer>
-	// 	</AuthContext.Provider>
-	// );
 
 	return (
 		<AuthContext.Provider value={authContext}>
@@ -115,7 +94,7 @@ function AppStackNav() {
 function SignOut() {
 	const { signOut } = React.useContext(AuthContext);
 	return (
-		<Button title = 'Sign Out' onPress = {signOut()} />
+		<Button title='Sign Out' onPress={signOut()} />
 	)
 }
 
@@ -160,23 +139,34 @@ function AuthHomeStackNav() {
 }
 
 function HomeStackNav({ navigation }) {
-	//token = AsyncStorage.getItem('token')
 	return (
 		<Stack.Navigator>
-			<Stack.Screen name="Home" component={HomeScreen}
-				options={{
-					headerLeft: () => (
-						<Icon style={{ paddingLeft: 10 }} name="bars" size={30} onPress={() => navigation.openDrawer()} />
-					),
-					headerRight: () => (
-						<Button
-							onPress={() => navigation.navigate('Sign In')}
-							title="Sign In"
-							color="lightgrey"
-						/>
-					),
-				}}
-			/>
+			{loggedIn ? (
+				// No token found, user isn't signed in
+				<Stack.Screen name="Home" component={HomeScreen}
+					options={{
+						headerLeft: () => (
+							<Icon style={{ paddingLeft: 10 }} name="bars" size={30} onPress={() => navigation.openDrawer()} />
+						),
+					}}
+				/>
+			) : (
+					// User is signed in
+					<Stack.Screen name="Home" component={HomeScreen}
+						options={{
+							headerLeft: () => (
+								<Icon style={{ paddingLeft: 10 }} name="bars" size={30} onPress={() => navigation.openDrawer()} />
+							), 
+							headerRight: () => (
+								<Button
+									onPress={() => navigation.navigate('Sign In')}
+									title="Sign In"
+									color="lightgrey"
+								/>
+							),
+						}}
+					/>
+				)}
 		</Stack.Navigator>
 	);
 }
