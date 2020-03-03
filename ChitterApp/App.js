@@ -112,14 +112,20 @@ function AppStackNav() {
 	)
 }
 
-function AuthDrawerNav() {
+function SignOut() {
 	const { signOut } = React.useContext(AuthContext);
+	return (
+		<Button title = 'Sign Out' onPress = {signOut()} />
+	)
+}
+
+function AuthDrawerNav() {
 	return (
 		<NavigationContainer>
 			<Drawer.Navigator>
 				<Drawer.Screen name="Home" component={AppStackNav} />
 				<Drawer.Screen name="Profile" component={UserScreen} />
-				<Drawer.Screen name="Sign Out" component={signOut()} />
+				<Drawer.Screen name="Sign Out" component={SignOut} />
 			</Drawer.Navigator>
 		</NavigationContainer>
 
