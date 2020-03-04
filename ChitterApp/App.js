@@ -108,19 +108,18 @@ function AuthDrawerNav() {
 				<Drawer.Screen name="Sign Out" component={SignOut} />
 			</Drawer.Navigator>
 		</NavigationContainer>
-
 	);
 }
 
 function SignInStack({ navigation }) {
 	return (
 		<Stack.Navigator>
-			<Stack.Screen name="Sign In" component={SignInScreen} 
-			options={{
-				headerLeft: () => (
-					<AIcon style={{ paddingLeft: 10 }} name="arrow-back" size={30} onPress={() => navigation.navigate('Home')} />
-				),
-			}} />
+			<Stack.Screen name="Sign In" component={SignInScreen}
+				options={{
+					headerLeft: () => (
+						<AIcon style={{ paddingLeft: 10 }} name="arrow-back" size={30} onPress={() => navigation.navigate('Home')} />
+					),
+				}} />
 		</Stack.Navigator>
 	);
 }
@@ -128,12 +127,12 @@ function SignInStack({ navigation }) {
 function SignUpStack({ navigation }) {
 	return (
 		<Stack.Navigator>
-			<Stack.Screen name="Sign Up" component={SignUpScreen} 
-			options={{
-				headerLeft: () => (
-					<Icon style={{ paddingLeft: 10 }} name="angle-left" size={30} onPress={() => navigation.navigate('Home')} />
-				),
-			}} />
+			<Stack.Screen name="Sign Up" component={SignUpScreen}
+				options={{
+					headerLeft: () => (
+						<Icon style={{ paddingLeft: 10 }} name="angle-left" size={30} onPress={() => navigation.navigate('Home')} />
+					),
+				}} />
 		</Stack.Navigator>
 	);
 }
@@ -147,7 +146,6 @@ function AppDrawerNav() {
 				<Drawer.Screen name="Sign Up" component={SignUpStack} />
 			</Drawer.Navigator>
 		</NavigationContainer>
-
 	);
 }
 
@@ -210,7 +208,7 @@ function SearchStackNav({ navigation }) {
 	);
 }
 
-function AppTabNav() {
+function AuthTabNav() {
 	return (
 		<Tab.Navigator>
 			<Tab.Screen
@@ -242,4 +240,38 @@ function AppTabNav() {
 			/>
 		</Tab.Navigator>
 	)
+}
+
+function UnAuthTabNav() {
+	return (
+		<Tab.Navigator>
+			<Tab.Screen
+				options={{
+					tabBarIcon: ({ color }) => <Icon
+						name="home"
+						size={30}
+						color={color} />
+				}}
+				name="Home" component={HomeStackNav}
+			/>
+			<Tab.Screen
+				options={{
+					tabBarIcon: ({ color }) => <Icon
+						name="search"
+						size={30}
+						color={color} />
+				}}
+				name="Search" component={SearchStackNav}
+			/>
+		</Tab.Navigator>
+	)
+}
+
+function AppTabNav() {
+	if (loggedIn) {
+		return <AuthTabNav />
+	}
+	else {
+		return <UnAuthTabNav />
+	}
 }

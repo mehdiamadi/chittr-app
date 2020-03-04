@@ -39,25 +39,25 @@ class SignUpScreen extends Component {
 			<View style={{ padding: 10 }} >
 				<TextInput
 					style={{ height: 40 }}
-					placeholder="given_name"
+					placeholder="First Name"
 					onChangeText={(given_name) => this.setState({ given_name })}
 					value={this.state.given_name}
 				/>
 				<TextInput
 					style={{ height: 40 }}
-					placeholder="family_name"
+					placeholder="Surname"
 					onChangeText={(family_name) => this.setState({ family_name })}
 					value={this.state.family_name}
 				/>
 				<TextInput
 					style={{ height: 40 }}
-					placeholder="email"
+					placeholder="Email"
 					onChangeText={(email) => this.setState({ email })}
 					value={this.state.email}
 				/>
 				<TextInput
 					style={{ height: 40 }}
-					placeholder="password"
+					placeholder="Password"
 					onChangeText={(password) => this.setState({ password })}
 					value={this.state.password}
 				/>

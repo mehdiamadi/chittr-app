@@ -46,13 +46,13 @@ export default function LoginScreens({ navigation }) {
 		<View style={{ padding: 10 }} >
 			<TextInput
 				style={{ height: 40 }}
-				placeholder="email"
+				placeholder="Email"
 				onChangeText={(email) => setEmail(email)}
 				value={email}
 			/>
 			<TextInput
 				style={{ height: 60 }}
-				placeholder="password"
+				placeholder="Password"
 				onChangeText={(password) => setPassword(password)}
 				value={password}
 				secureTextEntry
