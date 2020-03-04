@@ -44,14 +44,9 @@ export default function ChittrApp() {
 			signOut: () => {
 				setIsLoading(false);
 				setUserToken(null);
+				loggedIn = false;
 			}
 		};
-	}, []);
-
-	React.useEffect(() => {
-		setTimeout(() => {
-			setIsLoading(false);
-		}, 1000);
 	}, []);
 
 	if (isLoading) {

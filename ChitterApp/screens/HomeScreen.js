@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ScrollView, ActivityIndicator, Text, View, StyleSheet } from 'react-native';
+import { ScrollView, ActivityIndicator, Text, View, StyleSheet, RefreshControl } from 'react-native';
 
 const styles = StyleSheet.create({
 	container: {
@@ -13,53 +13,63 @@ const styles = StyleSheet.create({
 	},
 });
 
-export default class HomeScreen extends Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			isLoading: true,
-			shoppingListData: []
-		}
-	}
+function wait(timeout) {
+	return new Promise(resolve => {
+		setTimeout(resolve, timeout);
+	});
+}
 
-	getData() {
-		return fetch('http://10.0.2.2:3333/api/v0.0.5/chits')
+export default function HomeScreen() {
+
+	const [isLoading, setIsLoading] = React.useState(false);
+	const [chitData, setChitData] = React.useState([]);
+	const [refreshing, setRefreshing] = React.useState(false);
+
+	const onRefresh = React.useCallback(() => {
+		setRefreshing(true);
+
+		getData().then(() => {
+			setRefreshing(false);
+		});
+	}, [refreshing]);
+
+	getData = async() => {
+		fetch('http://10.0.2.2:3333/api/v0.0.5/chits')
 			.then((response) => response.json())
 			.then((responseJson) => {
-				this.setState({
-					isLoading: false,
-					shoppingListData: responseJson,
-				});
+				setIsLoading(false);
+				setChitData(responseJson);
 			})
 			.catch((error) => {
 				console.log(error);
 			});
-	}
+	};
 
-	componentDidMount() {
-		this.getData();
-	}
+	React.useEffect(() => {
+		getData();
+	}, []);
 
-	render() {
-		if (this.state.isLoading) {
-			return (
-				<View>
-					<ActivityIndicator />
-				</View>
-			)
-		}
+	if (isLoading) {
 		return (
-			<View style={styles.container}>
-				<ScrollView>
-					{this.state.shoppingListData.map((item) => {
-						return (
-							<View key={item.chit_id}>
-								<Text style={styles.item}>{item.user.given_name}{"\n\n"}{item.chit_content}</Text>
-							</View>
-						)
-					})}
-				</ScrollView>
+			<View>
+				<ActivityIndicator />
 			</View>
-		);
+		)
 	}
+	return (
+		<View style={styles.container}>
+			<ScrollView
+				refreshControl={
+					<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+				}>
+				{chitData.map((item) => {
+					return (
+						<View key={item.chit_id}>
+							<Text style={styles.item}>{item.user.given_name}{"\n\n"}{item.chit_content}</Text>
+						</View>
+					)
+				})}
+			</ScrollView>
+		</View>
+	);
 }

@@ -64,7 +64,7 @@ export default function PostChitScreen({ route }) {
 	};
 
 	React.useEffect(() => {
-		return fetch('http://10.0.2.2:3333/api/v0.0.5/user/' + user_id)
+		fetch('http://10.0.2.2:3333/api/v0.0.5/user/' + user_id)
 			.then((response) => response.json())
 			.then((responseJson) => {
 				setGivenName(responseJson.given_name);
@@ -75,23 +75,6 @@ export default function PostChitScreen({ route }) {
 				console.log(error);
 			});
 	}, []);
-
-	// const getUser = (user_id) => {
-	// 	fetch('http://10.0.2.2:3333/api/v0.0.5/user/' + userID)
-	// 		.then((response) => response.json())
-	// 		.then((responseJson) => {
-	// 			const user = {
-	// 				given_name: responseJson.given_name,
-	// 				family_name: responseJson.family_name,
-	// 				email: responseJson.email
-	// 			}
-	// 			//console.log("user id = " + user['given_name']);
-	// 			return user['given_name'];
-	// 		})
-	// 		.catch((error) => {
-	// 			console.log(error);
-	// 		});
-	// }
 
 	const postChit = () => {
 		return fetch("http://10.0.2.2:3333/api/v0.0.5/chits",
@@ -117,13 +100,6 @@ export default function PostChitScreen({ route }) {
 					})
 				})
 			})
-		// .then((response) => response.json())
-		// .then((responseJson) => {
-
-		// })
-		// .catch((error) => {
-		// 	console.error(error);
-		// });
 	};
 
 	return (
@@ -141,82 +117,3 @@ export default function PostChitScreen({ route }) {
 		</View >
 	);
 }
-
-
-
-// class CreateChitScreen extends Component{
-// 	constructor(props) {
-// 		super(props);
-// 		this.state = {
-// 			timestamp: '',
-// 			chit_content: '',
-// 			latitude: '',
-// 			longtitude: '',
-
-// 			given_name: '',
-// 			family_name: '',
-// 			email: '',
-// 		}
-// 	}
-
-// 	login() {
-// 		return fetch("http://10.0.2.2:3333/api/v0.0.5/chits",
-// 			{
-// 				method: 'POST',
-// 				headers: {
-// 					Accept: 'application/json',
-// 					'Content-Type': 'application/json',
-// 				},
-// 				body: JSON.stringify({
-// 					email: this.state.email,
-// 					password: this.state.password,
-// 					location : JSON.stringify({
-// 						longtitude: this.state.longtitude,
-// 						latitude: this.state.latitude,
-// 					}),
-// 					user : JSON.stringify({
-// 						given_name: this.state.given_name,
-// 						family_name: this.state.family_name,
-// 						email: this.state.email,
-// 					})
-// 				})
-// 			})
-// 			.then((response) => response.json())
-// 			.then((responseJson) => {
-// 				this.state.token = responseJson.token;
-// 				Alert.alert(this.state.token);
-// 			})
-// 			.catch((error) => {
-// 				console.error(error);
-// 			});
-// 	}
-
-// 	render() {
-// 		return (
-// 			<View style={{ padding: 10 }} >
-// 				<TextInput
-// 					style={{ height: 40 }}
-// 					placeholder="email"
-// 					onChangeText={(email) => this.setState({ email })}
-// 					value={this.state.email}
-// 				/>
-// 				<TextInput
-// 					style={{ height: 60 }}
-// 					placeholder="password"
-// 					onChangeText={(password) => this.setState({ password })}
-// 					value={this.state.password}
-// 				/>
-// 				<Button
-// 					onPress={() => this.login()}
-// 					title="Sign In"
-// 				//color="lightgrey"
-// 				/>
-// 				<Button
-// 					//onPress={() => navigation.navigate('Sign Up')}
-// 					title="Sign Up"
-// 				/>
-// 			</View >
-// 		);
-// 	}
-// }
-// export default CreateChitScreen;
