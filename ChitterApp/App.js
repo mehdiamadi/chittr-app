@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, View, ActivityIndicator, TouchableOpacity, Text } from 'react-native';
+import { Button, View, ActivityIndicator, TouchableOpacity, Text, Alert, AsyncStorage } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createDrawerNavigator } from '@react-navigation/drawer';
@@ -21,17 +21,21 @@ const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
 var loggedIn = false;
+var user_id;
+var user_token;
 
 export default function ChittrApp() {
-	const [isLoading, setIsLoading] = React.useState(true);
+	const [isLoading, setIsLoading] = React.useState(false);
 	const [userToken, setUserToken] = React.useState(null);
 
 	const authContext = React.useMemo(() => {
 		return {
-			signIn: (token) => {
+			signIn: (token, userID) => {
 				setIsLoading(false);
 				setUserToken(token);
 				loggedIn = true;
+				user_token = token;
+				user_id = userID;
 			},
 			signUp: () => {
 				setIsLoading(false);
@@ -185,7 +189,7 @@ function HomeStackNav({ navigation }) {
 function PostChitStackNav({ navigation }) {
 	return (
 		<Stack.Navigator>
-			<Stack.Screen name="Post" component={CreateChitScreen}
+			<Stack.Screen name="Post" component={CreateChitScreen} initialParams={{ user_id: user_id, token: user_token }}
 				options={{
 					headerLeft: () => (
 						<Icon style={{ paddingLeft: 10 }} name="bars" size={30} onPress={() => navigation.openDrawer()} />

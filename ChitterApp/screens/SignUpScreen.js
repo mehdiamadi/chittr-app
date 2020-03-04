@@ -26,12 +26,11 @@ class SignUpScreen extends Component {
 					password: this.state.password,
 				})
 			})
-			.then((response) => {
-				Alert.alert();
-			})
-			.catch((error) => {
-				console.error(error);
-			});
+			// .then((response) => {
+			// })
+			// .catch((error) => {
+			// 	console.error(error);
+			// });
 	}
 
 	render() {
