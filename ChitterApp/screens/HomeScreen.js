@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ScrollView, ActivityIndicator, Text, View, StyleSheet, RefreshControl } from 'react-native';
+import { ScrollView, ActivityIndicator, Text, View, StyleSheet, RefreshControl, Image } from 'react-native';
 
 const styles = StyleSheet.create({
 	container: {
@@ -10,6 +10,11 @@ const styles = StyleSheet.create({
 		padding: 30,
 		backgroundColor: 'white',
 		fontSize: 18,
+	},
+	photo: {
+		width: 100,
+		height: 100,
+		alignItems: 'center',
 	},
 });
 
@@ -33,7 +38,7 @@ export default function HomeScreen() {
 		});
 	}, [refreshing]);
 
-	getData = async() => {
+	getData = async () => {
 		fetch('http://10.0.2.2:3333/api/v0.0.5/chits')
 			.then((response) => response.json())
 			.then((responseJson) => {
@@ -65,7 +70,14 @@ export default function HomeScreen() {
 				{chitData.map((item) => {
 					return (
 						<View key={item.chit_id}>
-							<Text style={styles.item}>{item.user.given_name}{"\n\n"}{item.chit_content}</Text>
+							<Image
+								source={{ uri: 'http://10.0.2.2:3333/api/v0.0.5/chits/' + item.chit_id + '/photo' }}
+								style={styles.photo} />
+							<Text style={styles.item}>
+								{item.user.given_name}
+								{"\n\n"}
+								{item.chit_content}
+							</Text>
 						</View>
 					)
 				})}

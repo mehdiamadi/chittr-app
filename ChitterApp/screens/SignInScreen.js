@@ -7,8 +7,8 @@ import { AuthContext } from '../Context';
 export default function LoginScreens({ navigation }) {
 	const { signIn } = React.useContext(AuthContext);
 	const [userID, setUserID] = React.useState('');
-	const [email, setEmail] = React.useState('UPDATED@MAIL.COM');
-	const [password, setPassword] = React.useState('UPDATED');
+	const [email, setEmail] = React.useState('j.smith@mail.com');
+	const [password, setPassword] = React.useState('password');
 	const [token, setToken] = React.useState('');
 
 	const getToken = async () => {
