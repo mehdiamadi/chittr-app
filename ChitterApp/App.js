@@ -14,6 +14,7 @@ import SearchScreen from './screens/SearchScreen';
 import SignInScreen from './screens/SignInScreen'
 import SignUpScreen from './screens/SignUpScreen';
 import UserScreen from './screens/UserScreen';
+import ProfileScreen from './screens/ProfileScreen';
 
 import { AuthContext } from './Context';
 
@@ -103,7 +104,7 @@ function AuthDrawerNav() {
 		<NavigationContainer>
 			<Drawer.Navigator>
 				<Drawer.Screen name="Home" component={AppStackNav} />
-				<Drawer.Screen name="Profile" component={UserScreen} />
+				<Drawer.Screen name="Profile" component={ProfileScreen} initialParams={{ user_id: user_id, token: user_token }} />
 				<Drawer.Screen name="Sign Out" component={SignOut} />
 			</Drawer.Navigator>
 		</NavigationContainer>

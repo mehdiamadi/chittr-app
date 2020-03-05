@@ -26,11 +26,6 @@ class SignUpScreen extends Component {
 					password: this.state.password,
 				})
 			})
-			// .then((response) => {
-			// })
-			// .catch((error) => {
-			// 	console.error(error);
-			// });
 	}
 
 	render() {

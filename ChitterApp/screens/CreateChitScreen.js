@@ -7,7 +7,7 @@ export default function PostChitScreen({ route }) {
 
 	const { user_id } = route.params;
 	const { token } = route.params;
-
+	
 	const [locationPermission, setLocationPermission] = React.useState(false);
 	const [latitude, setLatitude] = React.useState('');
 	const [longtitude, setLongtitude] = React.useState('');
