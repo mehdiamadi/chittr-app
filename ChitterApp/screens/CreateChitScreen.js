@@ -10,8 +10,8 @@ export default function PostChitScreen({ route }) {
 	const { token } = route.params;
 
 	const [locationPermission, setLocationPermission] = React.useState(false);
-	const [latitude, setLatitude] = React.useState('');
-	const [longtitude, setLongtitude] = React.useState('');
+	const [latitude, setLatitude] = React.useState();
+	const [longitude, setLongitude] = React.useState();
 	const [chitContent, setChitContent] = React.useState('');
 	const [givenName, setGivenName] = React.useState('');
 	const [familyName, setFamilyName] = React.useState('');
@@ -38,7 +38,7 @@ export default function PostChitScreen({ route }) {
 			type: 'image/jpg'
 		});
 
-		return fetch("http://10.0.2.2:3333/api/v0.0.5/chits/"+ chit_id + "/photo",
+		return fetch("http://10.0.2.2:3333/api/v0.0.5/chits/" + chit_id + "/photo",
 			{
 				method: 'POST',
 				headers: {
@@ -88,8 +88,9 @@ export default function PostChitScreen({ route }) {
 		else {
 			Geolocation.getCurrentPosition(
 				(position) => {
-					const location = JSON.stringify(position);
-					this.setState({ location });
+					//const location = JSON.stringify(position);
+					setLatitude(position.coords.latitude);
+					setLongitude(position.coords.longitude);
 				},
 				(error) => {
 					Alert.alert(error.message)
@@ -104,6 +105,9 @@ export default function PostChitScreen({ route }) {
 	};
 
 	React.useEffect(() => {
+
+		
+
 		fetch('http://10.0.2.2:3333/api/v0.0.5/user/' + user_id)
 			.then((response) => response.json())
 			.then((responseJson) => {
@@ -114,10 +118,11 @@ export default function PostChitScreen({ route }) {
 			.catch((error) => {
 				console.log(error);
 			});
-	}, []);
+	}, [findCoordinates()]);
 
 	const postChit = () => {
-		return fetch("http://10.0.2.2:3333/api/v0.0.5/chits",
+
+		fetch("http://10.0.2.2:3333/api/v0.0.5/chits",
 			{
 				method: 'POST',
 				headers: {
@@ -129,8 +134,8 @@ export default function PostChitScreen({ route }) {
 					timestamp: new Date().getTime(),
 					chit_content: chitContent,
 					location: ({
-						longitude: 1234,
-						latitude: 1234,
+						longitude: longitude,
+						latitude: latitude,
 					}),
 					user: ({
 						user_id: parseInt(user_id),

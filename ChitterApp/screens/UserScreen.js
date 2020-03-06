@@ -166,7 +166,8 @@ export default function UserScreen({ route }) {
                     <Text>{givenName}</Text>
                     <Image
                         source={{ uri: 'http://10.0.2.2:3333/api/v0.0.5/user/' + userID + '/photo' }}
-                        style={styles.photo} />
+                        style={styles.photo}
+                    />
                     {token != null && userID != authID && checkIsFollowing()
                         ? <Button title="Unfollow" onPress={followUser('DELETE')} />
                         : (token != null && userID != authID && !checkIsFollowing()
