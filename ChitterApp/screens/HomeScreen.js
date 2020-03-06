@@ -24,11 +24,13 @@ function wait(timeout) {
 	});
 }
 
-export default function HomeScreen() {
+export default function HomeScreen({ route }) {
 
 	const [isLoading, setIsLoading] = React.useState(false);
 	const [chitData, setChitData] = React.useState([]);
 	const [refreshing, setRefreshing] = React.useState(false);
+
+	const { token } = route.params;
 
 	const onRefresh = React.useCallback(() => {
 		setRefreshing(true);
@@ -50,8 +52,33 @@ export default function HomeScreen() {
 			});
 	};
 
+	getAuthData = async () => {
+		fetch('http://10.0.2.2:3333/api/v0.0.5/chits',
+			{
+				method: 'GET',
+				headers: {
+					Accept: 'application/json',
+					'Content-Type': 'application/json',
+					'X-Authorization': token,
+				},
+			})
+			.then((response) => response.json())
+			.then((responseJson) => {
+				setIsLoading(false);
+				setChitData(responseJson);
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	};
+
 	React.useEffect(() => {
-		getData();
+		if (token == null) {
+			getData();
+		}
+		else {
+			getAuthData();
+		}
 	}, []);
 
 	if (isLoading) {

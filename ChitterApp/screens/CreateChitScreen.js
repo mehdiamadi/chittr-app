@@ -2,12 +2,13 @@ import React, { Component } from 'react';
 import { Text, View, TextInput, Button, PermissionsAndroid } from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 import { AuthContext } from '../Context';
+import ImagePicker from 'react-native-image-picker';
 
 export default function PostChitScreen({ route }) {
 
 	const { user_id } = route.params;
 	const { token } = route.params;
-	
+
 	const [locationPermission, setLocationPermission] = React.useState(false);
 	const [latitude, setLatitude] = React.useState('');
 	const [longtitude, setLongtitude] = React.useState('');
@@ -15,6 +16,45 @@ export default function PostChitScreen({ route }) {
 	const [givenName, setGivenName] = React.useState('');
 	const [familyName, setFamilyName] = React.useState('');
 	const [emailAddress, setEmail] = React.useState('');
+	const [photo, setPhoto] = React.useState(null);
+
+	showPicker = async () => {
+		const options = {
+			noData: true,
+		};
+		ImagePicker.launchImageLibrary(options, response => {
+			if (response.uri) {
+				setPhoto(response.uri);
+			}
+		});
+	}
+
+	uploadPhoto = async (chit_id) => {
+		// Create the form data object
+		var data = new FormData();
+		data.append('file', {
+			uri: photo,
+			name: 'file.jpg',
+			type: 'image/jpg'
+		});
+
+		return fetch("http://10.0.2.2:3333/api/v0.0.5/chits/"+ chit_id + "/photo",
+			{
+				method: 'POST',
+				headers: {
+					// Accept: 'application/json',
+					//'Content-Type': 'multipart/form-data;',
+					'X-Authorization': token,
+				},
+				body: data
+			})
+			.then(response => {
+				console.log('upload succes', response);
+			})
+			.catch(error => {
+				console.log('upload error', error);
+			});
+	};
 
 	async function requestLocationPermission() {
 		try {
@@ -100,6 +140,15 @@ export default function PostChitScreen({ route }) {
 					})
 				})
 			})
+			.then((response) => response.json())
+			.then((responseJson) => {
+				if (photo != null) {
+					uploadPhoto(responseJson.chit_id);
+				}
+			})
+			.catch((error) => {
+				console.log(error);
+			});
 	};
 
 	return (
@@ -113,6 +162,10 @@ export default function PostChitScreen({ route }) {
 			<Button
 				onPress={postChit}
 				title="Post"
+			/>
+			<Button
+				onPress={showPicker}
+				title="Upload Photo"
 			/>
 		</View >
 	);

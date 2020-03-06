@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
 	},
 });
 
-class SearchScreen extends Component {
+export default class SearchScreen extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -64,7 +64,7 @@ class SearchScreen extends Component {
 								<TouchableOpacity
 									onPress={() => {
 										this.props.navigation.navigate('User', {
-											userID: item.user_id,
+											userID: item.user_id
 										});
 									}}>
 									<View style={styles.item}>
@@ -79,4 +79,3 @@ class SearchScreen extends Component {
 		);
 	}
 }
-export default SearchScreen;

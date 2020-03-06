@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { ActivityIndicator, Text, View, StyleSheet, Alert, ScrollView, TouchableOpacity, Image } from 'react-native';
+import { ActivityIndicator, Text, View, StyleSheet, Alert, ScrollView, TouchableOpacity, Image, Button } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { AuthContext } from '../Context';
 
 const styles = StyleSheet.create({
     container: {
@@ -78,90 +79,79 @@ function FollowingScreen({ route }) {
 
 const Tab = createMaterialTopTabNavigator();
 
-export default class UserScreen extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            isLoading: true,
-            userID: '',
-            given_name: '',
-            followers: [],
-            following: [],
-            photo: '',
-        }
-    }
+export default function UserScreen({ route }) {
 
-    getUser(userID) {
-        return fetch('http://10.0.2.2:3333/api/v0.0.5/user/' + userID)
+    const { token } = route.params;
+    const { userID } = route.params;
+
+    const [isLoading, setIsLoading] = React.useState(true);
+    const [givenName, setGivenName] = React.useState('');
+    const [followers, setFollowers] = React.useState([]);
+    const [following, setFollowing] = React.useState([]);
+
+    const getUser = () => {
+        fetch('http://10.0.2.2:3333/api/v0.0.5/user/' + userID)
             .then((response) => response.json())
             .then((responseJson) => {
-                this.setState({
-                    given_name: responseJson.given_name,
-                });
+                setGivenName(responseJson.given_name);
             })
             .catch((error) => {
                 console.log(error);
             });
     }
 
-    getFollowers(userID) {
-        return fetch('http://10.0.2.2:3333/api/v0.0.5/user/' + userID + '/followers')
+    const getFollowers = () => {
+        fetch('http://10.0.2.2:3333/api/v0.0.5/user/' + userID + '/followers')
             .then((response) => response.json())
             .then((responseJson) => {
-                this.setState({
-                    followers: responseJson,
-                });
+                setFollowers(responseJson);
             })
             .catch((error) => {
                 console.log(error);
             });
     }
 
-    getFollowing(userID) {
-        return fetch('http://10.0.2.2:3333/api/v0.0.5/user/' + userID + '/following')
+    const getFollowing = () => {
+        fetch('http://10.0.2.2:3333/api/v0.0.5/user/' + userID + '/following')
             .then((response) => response.json())
             .then((responseJson) => {
-                this.setState({
-                    isLoading: false,
-                    following: responseJson,
-                });
+                setIsLoading(false);
+                setFollowing(responseJson);
             })
             .catch((error) => {
                 console.log(error);
             });
     }
 
-    componentDidMount() {
-        const { userID } = this.props.route.params;
-        this.state.userID = userID;
-        this.getUser(userID);
-        this.getFollowers(userID);
-        this.getFollowing(userID);
-    }
+    React.useEffect(() => {
+        getUser();
+        getFollowers();
+        getFollowing();
+    }, []);
 
-    render() {
-        if (this.state.isLoading) {
-            return (
-                <View>
-                    <ActivityIndicator />
-                </View>
-            )
-        }
+    if (isLoading) {
         return (
-            <React.Fragment>
-                <View style={styles.container}>
-                    <Text>{this.state.given_name}</Text>
-
-                    <Image
-                        source={{ uri: 'http://10.0.2.2:3333/api/v0.0.5/user/' + this.state.userID + '/photo' }}
-                        style={styles.photo} />
-                </View>
-
-                <Tab.Navigator>
-                    <Tab.Screen name="Followers" component={FollowersScreen} initialParams={{ followersData: this.state.followers }} lazy={true}/>
-                    <Tab.Screen name="Following" component={FollowingScreen} initialParams={{ followingData: this.state.following }} lazy={true}/>
-                </Tab.Navigator>
-            </React.Fragment>
-        );
+            <View>
+                <ActivityIndicator />
+            </View>
+        )
     }
+    return (
+        <React.Fragment>
+            <View style={styles.container}>
+                <Text>{givenName}</Text>
+                <Image
+                    source={{ uri: 'http://10.0.2.2:3333/api/v0.0.5/user/' + userID + '/photo' }}
+                    style={styles.photo} />
+                    {token != null ? (
+                        <Button title="Follow"></Button>
+                    ): (null)}
+            </View>
+            
+            <Tab.Navigator>
+                <Tab.Screen name="Followers" component={FollowersScreen} initialParams={{ followersData: followers }} lazy={true} />
+                <Tab.Screen name="Following" component={FollowingScreen} initialParams={{ followingData: following }} lazy={true} />
+            </Tab.Navigator>
+        </React.Fragment>
+    );
 }

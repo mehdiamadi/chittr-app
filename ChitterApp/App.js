@@ -46,6 +46,7 @@ export default function ChittrApp() {
 				setIsLoading(false);
 				setUserToken(null);
 				loggedIn = false;
+				user_token = null;
 			}
 		};
 	}, []);
@@ -87,7 +88,7 @@ function AppStackNav() {
 			/>
 			<Stack.Screen name="Sign In" component={SignInScreen} />
 			<Stack.Screen name="Sign Up" component={SignUpScreen} />
-			<Stack.Screen name="User" component={UserScreen} />
+			<Stack.Screen name="User" component={UserScreen} initialParams={{ token: user_token }}/>
 		</Stack.Navigator>
 	)
 }
@@ -154,7 +155,7 @@ function HomeStackNav({ navigation }) {
 		<Stack.Navigator>
 			{loggedIn ? (
 				// User isn't signed in
-				<Stack.Screen name="Home" component={HomeScreen}
+				<Stack.Screen name="Home" component={HomeScreen} initialParams={{token: user_token}}
 					options={{
 						headerLeft: () => (
 							<Icon style={{ paddingLeft: 10 }} name="bars" size={30} onPress={() => navigation.openDrawer()} />
@@ -163,7 +164,7 @@ function HomeStackNav({ navigation }) {
 				/>
 			) : (
 					// User is signed in
-					<Stack.Screen name="Home" component={HomeScreen}
+					<Stack.Screen name="Home" component={HomeScreen} initialParams={{token: user_token}}
 						options={{
 							headerLeft: () => (
 								<Icon style={{ paddingLeft: 10 }} name="bars" size={30} onPress={() => navigation.openDrawer()} />
