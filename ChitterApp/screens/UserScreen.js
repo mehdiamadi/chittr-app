@@ -83,11 +83,25 @@ export default function UserScreen({ route }) {
 
     const { token } = route.params;
     const { userID } = route.params;
+    const { authID } = route.params;
 
     const [isLoading, setIsLoading] = React.useState(true);
     const [givenName, setGivenName] = React.useState('');
     const [followers, setFollowers] = React.useState([]);
     const [following, setFollowing] = React.useState([]);
+
+    const followUser = (method) => {
+        fetch("http://10.0.2.2:3333/api/v0.0.5/user/" + userID + "/follow",
+            {
+                method: method,
+                headers: ({
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    'X-Authorization': token,
+                }),
+            }
+        )
+    };
 
     const getUser = () => {
         fetch('http://10.0.2.2:3333/api/v0.0.5/user/' + userID)
@@ -115,12 +129,21 @@ export default function UserScreen({ route }) {
         fetch('http://10.0.2.2:3333/api/v0.0.5/user/' + userID + '/following')
             .then((response) => response.json())
             .then((responseJson) => {
-                setIsLoading(false);
                 setFollowing(responseJson);
+                setIsLoading(false);
             })
             .catch((error) => {
                 console.log(error);
             });
+    }
+
+    const checkIsFollowing = () => {
+        for (var i = 0; i < Object.keys(followers).length; i++) {
+            var user = followers[i];
+            if (user.user_id == parseInt(authID)) {
+                return true;
+            }
+        }
     }
 
     React.useEffect(() => {
@@ -136,22 +159,28 @@ export default function UserScreen({ route }) {
             </View>
         )
     }
-    return (
-        <React.Fragment>
-            <View style={styles.container}>
-                <Text>{givenName}</Text>
-                <Image
-                    source={{ uri: 'http://10.0.2.2:3333/api/v0.0.5/user/' + userID + '/photo' }}
-                    style={styles.photo} />
-                    {token != null ? (
-                        <Button title="Follow"></Button>
-                    ): (null)}
-            </View>
-            
-            <Tab.Navigator>
-                <Tab.Screen name="Followers" component={FollowersScreen} initialParams={{ followersData: followers }} lazy={true} />
-                <Tab.Screen name="Following" component={FollowingScreen} initialParams={{ followingData: following }} lazy={true} />
-            </Tab.Navigator>
-        </React.Fragment>
-    );
+    else {
+        return (
+            <React.Fragment>
+                <View style={styles.container}>
+                    <Text>{givenName}</Text>
+                    <Image
+                        source={{ uri: 'http://10.0.2.2:3333/api/v0.0.5/user/' + userID + '/photo' }}
+                        style={styles.photo} />
+                    {token != null && userID != authID && checkIsFollowing()
+                        ? <Button title="Unfollow" onPress={followUser('DELETE')} />
+                        : (token != null && userID != authID && !checkIsFollowing()
+                            ? <Button title="Follow" onPress={followUser('POST')} />
+                            : (null)
+                        )
+                    }
+                </View>
+
+                <Tab.Navigator>
+                    <Tab.Screen name="Followers" component={FollowersScreen} initialParams={{ followersData: followers }} />
+                    <Tab.Screen name="Following" component={FollowingScreen} initialParams={{ followingData: following }} />
+                </Tab.Navigator>
+            </React.Fragment >
+        );
+    }
 }

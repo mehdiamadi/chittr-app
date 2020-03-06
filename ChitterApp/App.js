@@ -22,8 +22,8 @@ const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
 var loggedIn = false;
-var user_id;
-var user_token;
+var user_id = null;
+var user_token = null;
 
 export default function ChittrApp() {
 	const [isLoading, setIsLoading] = React.useState(false);
@@ -88,7 +88,7 @@ function AppStackNav() {
 			/>
 			<Stack.Screen name="Sign In" component={SignInScreen} />
 			<Stack.Screen name="Sign Up" component={SignUpScreen} />
-			<Stack.Screen name="User" component={UserScreen} initialParams={{ token: user_token }}/>
+			<Stack.Screen name="User" component={UserScreen} initialParams={{ token: user_token, authID: user_id}}/>
 		</Stack.Navigator>
 	)
 }
