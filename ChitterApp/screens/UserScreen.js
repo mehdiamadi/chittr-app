@@ -79,7 +79,7 @@ function FollowingScreen({ route }) {
 
 const Tab = createMaterialTopTabNavigator();
 
-export default function UserScreen({ route }) {
+export default function UserScreen({ route, navigation }) {
 
     const { token } = route.params;
     const { userID } = route.params;
@@ -91,6 +91,7 @@ export default function UserScreen({ route }) {
     const [following, setFollowing] = React.useState([]);
 
     const followUser = (method) => {
+        console.log('test');
         fetch("http://10.0.2.2:3333/api/v0.0.5/user/" + userID + "/follow",
             {
                 method: method,
@@ -98,9 +99,10 @@ export default function UserScreen({ route }) {
                     Accept: 'application/json',
                     'Content-Type': 'application/json',
                     'X-Authorization': token,
-                }),
-            }
-        )
+                })
+            })
+
+            console.log('test');
     };
 
     const getUser = () => {
@@ -146,11 +148,20 @@ export default function UserScreen({ route }) {
         }
     }
 
-    React.useEffect(() => {
-        getUser();
-        getFollowers();
-        getFollowing();
-    }, []);
+    // React.useEffect(() => {
+    //     getUser();
+    //     getFollowers();
+    //     getFollowing();
+    // }, []);
+
+    React.useEffect(
+        () => navigation.addListener('focus', () =>
+            getUser(),
+            getFollowers(),
+            getFollowing(),
+        ),
+        []
+    );
 
     if (isLoading) {
         return (

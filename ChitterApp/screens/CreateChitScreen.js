@@ -1,13 +1,16 @@
 import React, { Component } from 'react';
-import { Text, View, TextInput, Button, PermissionsAndroid } from 'react-native';
+import { Text, View, TextInput, Button, PermissionsAndroid, TouchableOpacity, Alert } from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
-import { AuthContext } from '../Context';
 import ImagePicker from 'react-native-image-picker';
+import { storeDrafts, getDrafts, deleteDraftAPI, storeNewDraft } from '../DraftsAPI';
+import AsyncStorage from '@react-native-community/async-storage';
 
-export default function PostChitScreen({ route }) {
+export default function CreateChitScreen({ route, navigation }) {
 
 	const { user_id } = route.params;
 	const { token } = route.params;
+	const { draftIndex } = route.params;
+	const { draftContent } = route.params;
 
 	const [locationPermission, setLocationPermission] = React.useState(false);
 	const [latitude, setLatitude] = React.useState();
@@ -18,7 +21,87 @@ export default function PostChitScreen({ route }) {
 	const [emailAddress, setEmail] = React.useState('');
 	const [photo, setPhoto] = React.useState(null);
 
-	showPicker = async () => {
+	async function saveNewDraft() {
+		var draft = ({
+			timestamp: new Date().getTime(),
+			chit_content: chitContent,
+			location: ({
+				longitude: longitude,
+				latitude: latitude,
+			}),
+			user: ({
+				user_id: parseInt(user_id),
+				given_name: givenName,
+				family_name: familyName,
+				email: emailAddress,
+			})
+		})
+
+		try {
+			getDrafts().then(result => {
+				if (result == null) { // if no drafts have been previously saved
+					var draftData = [
+						draft
+					]
+					storeDrafts(JSON.stringify(draftData));
+				}
+				else {
+					storeNewDraft(draft);
+				}
+			})
+		} catch (e) {
+			// saving error
+		}
+
+		navigation.navigate('Home');
+	}
+
+	async function saveDraft() {
+		var draft = ({
+			timestamp: new Date().getTime(),
+			chit_content: chitContent,
+			location: ({
+				longitude: longitude,
+				latitude: latitude,
+			}),
+			user: ({
+				user_id: parseInt(user_id),
+				given_name: givenName,
+				family_name: familyName,
+				email: emailAddress,
+			})
+		})
+
+		try {
+			getDrafts().then(result => {
+				storeDrafts(result.push(draft));
+				Alert.alert('saved');
+			})
+		} catch (e) {
+			console.log(e);
+		}
+	}
+
+	async function deleteDraft() {
+		try {
+			deleteDraftAPI(draftIndex);
+			navigation.navigate('Home');
+		} catch (e) {
+			console.log(e);
+		}
+	}
+
+	// saveNewDraft = async () => {
+	// 	try {
+	// 		await AsyncStorage.clear()
+	// 	} catch (e) {
+	// 		// remove error
+	// 	}
+
+	// 	console.log('Done.')
+	// }
+
+	const showPicker = () => {
 		const options = {
 			noData: true,
 		};
@@ -105,9 +188,6 @@ export default function PostChitScreen({ route }) {
 	};
 
 	React.useEffect(() => {
-
-		
-
 		fetch('http://10.0.2.2:3333/api/v0.0.5/user/' + user_id)
 			.then((response) => response.json())
 			.then((responseJson) => {
@@ -118,10 +198,13 @@ export default function PostChitScreen({ route }) {
 			.catch((error) => {
 				console.log(error);
 			});
+
+			if (draftContent != undefined) {
+				setChitContent(draftContent);
+			}
 	}, [findCoordinates()]);
 
 	const postChit = () => {
-
 		fetch("http://10.0.2.2:3333/api/v0.0.5/chits",
 			{
 				method: 'POST',
@@ -154,16 +237,29 @@ export default function PostChitScreen({ route }) {
 			.catch((error) => {
 				console.log(error);
 			});
+
+			if (draftIndex != null) { // if chit was a draft then delete it from AsyncStorage
+				deleteDraft();
+			}
+			navigation.navigate('Home');
 	};
 
 	return (
 		<View style={{ padding: 10 }} >
-			<TextInput
-				style={{ height: 40 }}
-				placeholder="What's on your mind?"
-				onChangeText={(chitContent) => setChitContent(chitContent)}
-				value={chitContent}
-			/>
+			{draftContent == null ? ( // if chit is not a draft then dispaly normal text input
+				<TextInput
+					style={{ height: 40 }}
+					placeholder="What's on your mind?"
+					onChangeText={(chitContent) => setChitContent(chitContent)}
+					value={chitContent}
+				/>
+			) : ( // if chit is a draft then the value of the text input is the draft content
+					<TextInput
+						style={{ height: 40 }}
+						onChangeText={(chitContent) => setChitContent(chitContent)}
+						value={chitContent}
+					/>
+				)}
 			<Button
 				onPress={postChit}
 				title="Post"
@@ -172,6 +268,24 @@ export default function PostChitScreen({ route }) {
 				onPress={showPicker}
 				title="Upload Photo"
 			/>
+			{draftIndex == null ? (
+				<Button
+					onPress={saveNewDraft}
+					title="Save as draft"
+				/>
+			) : (
+					<React.Fragment>
+						<Button
+							onPress={saveDraft}
+							title="Save draft"
+						/>
+						<TouchableOpacity onPress={deleteDraft}>
+							<View>
+								<Text>Delete draft</Text>
+							</View>
+						</TouchableOpacity>
+					</React.Fragment>
+				)}
 		</View >
 	);
 }

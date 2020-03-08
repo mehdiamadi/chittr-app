@@ -15,6 +15,7 @@ import SignInScreen from './screens/SignInScreen'
 import SignUpScreen from './screens/SignUpScreen';
 import UserScreen from './screens/UserScreen';
 import ProfileScreen from './screens/ProfileScreen';
+import DraftsScreen from './screens/DraftsScreen';
 
 import { AuthContext } from './Context';
 
@@ -88,7 +89,9 @@ function AppStackNav() {
 			/>
 			<Stack.Screen name="Sign In" component={SignInScreen} />
 			<Stack.Screen name="Sign Up" component={SignUpScreen} />
-			<Stack.Screen name="User" component={UserScreen} initialParams={{ token: user_token, authID: user_id}}/>
+			<Stack.Screen name="User" component={UserScreen} initialParams={{ token: user_token, authID: user_id }} />
+			<Stack.Screen name="Post" component={CreateChitScreen} />
+			<Stack.Screen name="Drafts" component={DraftsScreen} />
 		</Stack.Navigator>
 	)
 }
@@ -106,6 +109,7 @@ function AuthDrawerNav() {
 			<Drawer.Navigator>
 				<Drawer.Screen name="Home" component={AppStackNav} />
 				<Drawer.Screen name="Profile" component={ProfileScreen} initialParams={{ user_id: user_id, token: user_token }} />
+				<Drawer.Screen name="Drafts" component={DraftsScreen} initialParams={{ user_id: user_id, token: user_token }} />
 				<Drawer.Screen name="Sign Out" component={SignOut} />
 			</Drawer.Navigator>
 		</NavigationContainer>
@@ -155,7 +159,7 @@ function HomeStackNav({ navigation }) {
 		<Stack.Navigator>
 			{loggedIn ? (
 				// User isn't signed in
-				<Stack.Screen name="Home" component={HomeScreen} initialParams={{token: user_token}}
+				<Stack.Screen name="Home" component={HomeScreen} initialParams={{ token: user_token }}
 					options={{
 						headerLeft: () => (
 							<Icon style={{ paddingLeft: 10 }} name="bars" size={30} onPress={() => navigation.openDrawer()} />
@@ -164,7 +168,7 @@ function HomeStackNav({ navigation }) {
 				/>
 			) : (
 					// User is signed in
-					<Stack.Screen name="Home" component={HomeScreen} initialParams={{token: user_token}}
+					<Stack.Screen name="Home" component={HomeScreen} initialParams={{ token: user_token }}
 						options={{
 							headerLeft: () => (
 								<Icon style={{ paddingLeft: 10 }} name="bars" size={30} onPress={() => navigation.openDrawer()} />

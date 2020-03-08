@@ -24,7 +24,7 @@ function wait(timeout) {
 	});
 }
 
-export default function HomeScreen({ route }) {
+export default function HomeScreen({ route, navigation }) {
 
 	const [isLoading, setIsLoading] = React.useState(false);
 	const [chitData, setChitData] = React.useState([]);
@@ -73,12 +73,17 @@ export default function HomeScreen({ route }) {
 	};
 
 	React.useEffect(() => {
-		if (token == null) {
-			getData();
-		}
-		else {
-			getAuthData();
-		}
+		const unsubscribe = navigation.addListener('focus', () => {
+			if (token == null) {
+				getData();
+			}
+			else {
+				getAuthData();
+			}
+		  });
+	  
+		  // Return the function to unsubscribe from the event so it gets removed on unmount
+		  return unsubscribe;
 	}, []);
 
 	if (isLoading) {
@@ -88,6 +93,7 @@ export default function HomeScreen({ route }) {
 			</View>
 		)
 	}
+
 	return (
 		<View style={styles.container}>
 			<ScrollView
