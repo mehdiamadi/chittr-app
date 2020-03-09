@@ -1,11 +1,11 @@
 import React from 'react'
-import { ScrollView, ActivityIndicator, Text, View, Image } from 'react-native'
+import { ScrollView, ActivityIndicator, Text, View, Image, TouchableOpacity } from 'react-native'
 import { useFocusEffect } from '@react-navigation/native'
 import styles from '../styles'
-import { Card } from 'react-native-elements'
+import { Card, Avatar, Header, Button } from 'react-native-elements'
 const fetch = require('isomorphic-fetch')
 
-export default function HomeScreen ({ route, navigation }) {
+export default function HomeScreen({ route, navigation }) {
   const [isLoading, setIsLoading] = React.useState(false)
   const [chitData, setChitData] = React.useState([])
 
@@ -93,28 +93,54 @@ export default function HomeScreen ({ route, navigation }) {
   // )
 
   return (
-    <View style={styles.container}>
-      <ScrollView>
-        {chitData.map((item) => {
-          return (
-            <View key={item.chit_id}>
-              <Card
-                title={item.user.given_name}
-                image={
+    <>
+      <View>
+        <Header
+          leftComponent={{ icon: 'menu', size: 30, color: '#fff' }}
+          centerComponent={{ text: 'HOME', style: { color: '#fff', fontSize: 20 } }}
+          rightComponent={
+            <TouchableOpacity onPress={() => { navigation.navigate('Sign In') }}>
+              <View style={{
+                backgroundColor: 'white',
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderRadius: 10,
+                padding: 5
+              }}
+              >
+                <Text>Sign In</Text>
+              </View>
+            </TouchableOpacity>}
+          containerStyle={styles.headerContainer}
+        />
+      </View>
+      <View style={styles.container}>
+        <ScrollView>
+          {chitData.map((item) => {
+            return (
+              <View key={item.chit_id}>
+                <Card
+                  title={item.user.given_name}
+                  image={
+                    <Image
+                      source={{ uri: 'http://10.0.2.2:3333/api/v0.0.5/user/' + item.user.user_id + '/photo' }}
+                      style={styles.avatar}
+                    />
+                  }
+                >
                   <Image
                     source={{ uri: 'http://10.0.2.2:3333/api/v0.0.5/chits/' + item.chit_id + '/photo' }}
                     style={styles.photo}
                   />
-                }
-              >
-                <Text style={{ marginBottom: 10 }}>
-                  {item.chit_content}
-                </Text>
-              </Card>
-            </View>
-          )
-        })}
-      </ScrollView>
-    </View>
+                  <Text style={{ marginBottom: 10 }}>
+                    {item.chit_content}
+                  </Text>
+                </Card>
+              </View>
+            )
+          })}
+        </ScrollView>
+      </View>
+    </>
   )
 }

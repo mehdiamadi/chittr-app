@@ -1,8 +1,9 @@
 import React from 'react'
-import { TextInput, View, Button, Alert } from 'react-native'
+import { TextInput, View, Alert, SafeAreaView } from 'react-native'
 import { AuthContext } from '../Context'
-const fetch = require('isomorphic-fetch')
+import { Input, Button, Text, Header, Icon } from 'react-native-elements'
 import styles from '../styles'
+const fetch = require('isomorphic-fetch')
 
 export default function LoginScreens ({ navigation }) {
   const { signIn } = React.useContext(AuthContext)
@@ -11,9 +12,10 @@ export default function LoginScreens ({ navigation }) {
   const [password, setPassword] = React.useState('password')
   const [token, setToken] = React.useState('')
 
+  const enabled = email.length > 0 && password.length > 0
   const getToken = async () => {
     /* if (email == '' || password == '') {
-    Alert.alert('empty');
+    Alert.alert('');
     }
     else { */
     fetch('http://10.0.2.2:3333/api/v0.0.5/login',
@@ -36,7 +38,7 @@ export default function LoginScreens ({ navigation }) {
       })
       .catch((error) => {
         console.log(error)
-        Alert.alert('invalid')
+        Alert.alert('Unable to sign in, check your details and try again')
       })
     // }
   }
@@ -46,31 +48,60 @@ export default function LoginScreens ({ navigation }) {
   }
 
   return (
-    <View style={{ padding: 10 }}>
-      <TextInput
-        style={{ height: 40 }}
-        placeholder='Email'
-        onChangeText={(email) => setEmail(email)}
-        value={email}
-        // value={"j.smith@mail.com"}
-      />
-      <TextInput
-        style={{ height: 60 }}
-        placeholder='Password'
-        onChangeText={(password) => setPassword(password)}
-        value={password}
-        // value={"password"}
-        secureTextEntry
-      />
-
-      <Button
-        onPress={getToken}
-        title='Sign In'
-      />
-      <Button
-        onPress={() => navigation.navigate('Sign Up')}
-        title='Sign Up'
-      />
-    </View>
+    <>
+      <View>
+        <Header
+          leftComponent={{ icon: 'arrow-back', size: 30, color: '#fff', onPress=navigation.navigate('Home')}}
+          centerComponent={{ text: 'SIGN IN', style: { color: '#fff', fontSize: 20 } }}
+          containerStyle={styles.headerContainer}
+        />
+      </View>
+      <View style={styles.container}>
+        <Text h1 style={styles.signInTitle}>Chittr</Text>
+        <View style={styles.signInContainer}>
+          <Input
+            placeholder='Email Address'
+            leftIcon={
+              <Icon
+                type='font-awesome'
+                name='envelope'
+                size={24}
+                color='black'
+                iconStyle={styles.signInIcons}
+              />
+            }
+            onChangeText={(email) => setEmail(email)}
+            value={email}
+          />
+          <Input
+            placeholder='Password'
+            leftIcon={
+              <Icon
+                type='font-awesome'
+                name='user'
+                size={24}
+                color='black'
+                iconStyle={{ paddingRight: 15 }}
+              />
+            }
+            onChangeText={(password) => setPassword(password)}
+            value={password}
+            secureTextEntry
+          />
+          <Button
+            disabled={!enabled}
+            onPress={getToken}
+            title='Sign In'
+            type='solid'
+            buttonStyle={{ marginTop: 100 }}
+          />
+          <Button
+            onPress={() => navigation.navigate('Sign Up')}
+            title='Sign Up'
+            type='outline'
+          />
+        </View>
+      </View>
+    </>
   )
 }

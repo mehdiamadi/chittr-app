@@ -87,7 +87,7 @@ function AppStackNav () {
           headerShown: false
         }}
       />
-      <Stack.Screen name='Sign In' component={SignInScreen} />
+      <Stack.Screen name='Sign In' component={SignInScreen} options={{ headerShown: false }} />
       <Stack.Screen name='Sign Up' component={SignUpScreen} />
       <Stack.Screen name='User' component={UserScreen} initialParams={{ token: globalUserToken, authID: globalUserID }} />
       <Stack.Screen name='Post' component={CreateChitScreen} />
@@ -174,7 +174,9 @@ function HomeStackNav ({ navigation }) {
       ) : (
       // User is signed in
         <Stack.Screen
-          name='Home' component={HomeScreen} initialParams={{ token: globalUserToken }}
+          name='Home'
+          component={HomeScreen}
+          initialParams={{ token: globalUserToken }}
           options={{
             headerLeft: () => (
               <Icon style={{ paddingLeft: 10 }} name='bars' size={30} onPress={() => navigation.openDrawer()} />
