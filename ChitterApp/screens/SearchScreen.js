@@ -1,19 +1,7 @@
 import React, { Component } from 'react'
-import { Text, View, ActivityIndicator, TextInput, Button, ScrollView, StyleSheet, TouchableOpacity } from 'react-native'
+import { Text, View, ActivityIndicator, TextInput, Button, ScrollView, TouchableOpacity } from 'react-native'
+import styles from '../styles'
 const fetch = require('isomorphic-fetch')
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: 'lightgrey'
-  },
-  item: {
-    marginTop: 12,
-    padding: 30,
-    backgroundColor: 'white',
-    fontSize: 18
-  }
-})
 
 export default class SearchScreen extends Component {
   constructor (props) {

@@ -3,6 +3,7 @@ import { Text, View, TextInput, Button, PermissionsAndroid, TouchableOpacity, Al
 import Geolocation from 'react-native-geolocation-service'
 import ImagePicker from 'react-native-image-picker'
 import { storeDrafts, getDrafts, deleteDraftAPI, storeNewDraft } from '../DraftsAPI'
+import styles from '../styles'
 const fetch = require('isomorphic-fetch')
 
 export default function CreateChitScreen ({ route, navigation }) {

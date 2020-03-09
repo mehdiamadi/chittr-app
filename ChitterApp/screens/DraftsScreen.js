@@ -1,23 +1,7 @@
 import React from 'react'
-import { ScrollView, ActivityIndicator, Text, View, StyleSheet, TouchableOpacity } from 'react-native'
+import { ScrollView, ActivityIndicator, Text, View, TouchableOpacity } from 'react-native'
 import { getDrafts } from '../DraftsAPI'
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1
-  },
-  item: {
-    marginTop: 12,
-    padding: 30,
-    backgroundColor: 'white',
-    fontSize: 18
-  },
-  photo: {
-    width: 100,
-    height: 100,
-    alignItems: 'center'
-  }
-})
+import styles from '../styles'
 
 export default function DraftsScreen ({ route, navigation }) {
   const { userID } = route.params

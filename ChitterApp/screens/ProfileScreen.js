@@ -1,27 +1,8 @@
 import React from 'react'
-import { Text, TextInput, View, Button, StyleSheet, Image } from 'react-native'
+import { Text, TextInput, View, Button, Image } from 'react-native'
 import ImagePicker from 'react-native-image-picker'
+import styles from '../styles'
 const fetch = require('isomorphic-fetch')
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 0,
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    flexShrink: 1
-  },
-  item: {
-    marginTop: 12,
-    padding: 30,
-    backgroundColor: 'white',
-    fontSize: 18
-  },
-  photo: {
-    width: 100,
-    height: 100,
-    alignItems: 'center'
-  }
-})
 
 export default function ProfileScreen ({ route }) {
   const [givenName, setGivenName] = React.useState('')

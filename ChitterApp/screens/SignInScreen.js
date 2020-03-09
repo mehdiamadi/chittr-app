@@ -2,6 +2,7 @@ import React from 'react'
 import { TextInput, View, Button, Alert } from 'react-native'
 import { AuthContext } from '../Context'
 const fetch = require('isomorphic-fetch')
+import styles from '../styles'
 
 export default function LoginScreens ({ navigation }) {
   const { signIn } = React.useContext(AuthContext)

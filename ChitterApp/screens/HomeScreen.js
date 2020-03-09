@@ -1,39 +1,15 @@
 import React from 'react'
-import { ScrollView, ActivityIndicator, Text, View, StyleSheet, RefreshControl, Image } from 'react-native'
+import { ScrollView, ActivityIndicator, Text, View, Image } from 'react-native'
 import { useFocusEffect } from '@react-navigation/native'
+import styles from '../styles'
+import { Card } from 'react-native-elements'
 const fetch = require('isomorphic-fetch')
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1
-  },
-  item: {
-    marginTop: 12,
-    padding: 30,
-    backgroundColor: 'white',
-    fontSize: 18
-  },
-  photo: {
-    width: 100,
-    height: 100,
-    alignItems: 'center'
-  }
-})
 
 export default function HomeScreen ({ route, navigation }) {
   const [isLoading, setIsLoading] = React.useState(false)
   const [chitData, setChitData] = React.useState([])
-  const [refreshing, setRefreshing] = React.useState(false)
 
   const { token } = route.params
-
-  const onRefresh = React.useCallback(() => {
-    setRefreshing(true)
-
-    getData().then(() => {
-      setRefreshing(false)
-    })
-  }, [refreshing])
 
   const getData = async () => {
     fetch('http://10.0.2.2:3333/api/v0.0.5/chits')
@@ -90,25 +66,51 @@ export default function HomeScreen ({ route, navigation }) {
     )
   }
 
+  // return (
+  //   <View style={styles.container}>
+  //     <ScrollView
+  //       refreshControl={
+  //         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+  //       }
+  //     >
+  //       {chitData.map((item) => {
+  //         return (
+  //           <View key={item.chit_id}>
+  //             <Image
+  //               source={{ uri: 'http://10.0.2.2:3333/api/v0.0.5/chits/' + item.chit_id + '/photo' }}
+  //               style={styles.photo}
+  //             />
+  //             <Text style={styles.item}>
+  //               {item.user.given_name}
+  //               {'\n\n'}
+  //               {item.chit_content}
+  //             </Text>
+  //           </View>
+  //         )
+  //       })}
+  //     </ScrollView>
+  //   </View>
+  // )
+
   return (
     <View style={styles.container}>
-      <ScrollView
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-      >
+      <ScrollView>
         {chitData.map((item) => {
           return (
             <View key={item.chit_id}>
-              <Image
-                source={{ uri: 'http://10.0.2.2:3333/api/v0.0.5/chits/' + item.chit_id + '/photo' }}
-                style={styles.photo}
-              />
-              <Text style={styles.item}>
-                {item.user.given_name}
-                {'\n\n'}
-                {item.chit_content}
-              </Text>
+              <Card
+                title={item.user.given_name}
+                image={
+                  <Image
+                    source={{ uri: 'http://10.0.2.2:3333/api/v0.0.5/chits/' + item.chit_id + '/photo' }}
+                    style={styles.photo}
+                  />
+                }
+              >
+                <Text style={{ marginBottom: 10 }}>
+                  {item.chit_content}
+                </Text>
+              </Card>
             </View>
           )
         })}
