@@ -50,11 +50,11 @@ export default function LoginScreens ({ navigation }) {
   return (
     <>
       <View>
-        <Header
-          leftComponent={{ icon: 'arrow-back', size: 30, color: '#fff', onPress=navigation.navigate('Home')}}
+        {/* <Header
+          leftComponent={{ icon: 'arrow-back', size: 30, color: '#fff' }}
           centerComponent={{ text: 'SIGN IN', style: { color: '#fff', fontSize: 20 } }}
           containerStyle={styles.headerContainer}
-        />
+        /> */}
       </View>
       <View style={styles.container}>
         <Text h1 style={styles.signInTitle}>Chittr</Text>

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Text, TextInput, View, Button, Image } from 'react-native'
-import ImagePicker from 'react-native-image-picker'
+import { RNCamera } from 'react-native-camera'
 import styles from '../styles'
 const fetch = require('isomorphic-fetch')
 
@@ -9,6 +9,8 @@ export default function ProfileScreen ({ route }) {
   const [familyName, setFamilyName] = React.useState('')
   const [emailAddress, setEmail] = React.useState('')
   const [password, setPassword] = React.useState('')
+  const [photo, setPhoto] = React.useState(null)
+  const [openCamera, setOpenCamera] = React.useState(false)
 
   const { userID } = route.params
   const { token } = route.params
@@ -26,42 +28,26 @@ export default function ProfileScreen ({ route }) {
       })
   }, [])
 
-  const showPicker = async () => {
-    const options = {
-      noData: true
+  const takePicture = async () => {
+    if (this.camera) {
+      const options = { quality: 0.5, base64: true }
+      const data = await this.camera.takePictureAsync(options)
+      setPhoto(data)
     }
-    ImagePicker.launchImageLibrary(options, response => {
-      if (response.uri) {
-        uploadPhoto(response.uri)
-      }
-    })
   }
 
-  // if (photo != null) {
-  //     uploadPhoto();
-  // }
-
-  const uploadPhoto = async (image) => {
-    // Create the form data object
-    var data = new FormData() // eslint-disable-line no-undef
-    data.append('file', {
-      uri: image,
-      name: 'file.jpg',
-      type: 'image/jpg'
-    })
-
-    return fetch('http://10.0.2.2:3333/api/v0.0.5/user/photo',
+  const uploadPhoto = () => {
+    fetch('http://10.0.2.2:3333/api/v0.0.5/user/photo',
       {
         method: 'POST',
         headers: {
-          // Accept: 'application/json',
-          // 'Content-Type': 'multipart/form-data;',
+          'Content-Type': 'image/jpeg',
           'X-Authorization': token
         },
-        body: data
+        body: photo
       })
       .then(response => {
-        console.log('upload succes', response)
+        console.log('upload success', response)
       })
       .catch(error => {
         console.log('upload error', error)
@@ -69,6 +55,7 @@ export default function ProfileScreen ({ route }) {
   }
 
   const editUser = () => {
+    uploadPhoto()
     fetch('http://10.0.2.2:3333/api/v0.0.5/user/' + userID,
       {
         method: 'PATCH',
@@ -124,10 +111,20 @@ export default function ProfileScreen ({ route }) {
           title='Edit'
         />
         <Button
-          onPress={showPicker}
+          onPress={takePicture}
           title='Upload New Photo'
         />
       </View>
+      <RNCamera
+        ref={ref => {
+          this.camera = ref
+        }}
+        style={{
+          flex: 1,
+          justifyContent: 'flex-end',
+          alignItems: 'center'
+        }}
+      />
     </>
   )
 }

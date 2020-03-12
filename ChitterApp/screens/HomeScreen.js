@@ -95,7 +95,7 @@ export default function HomeScreen({ route, navigation }) {
   return (
     <>
       <View>
-        <Header
+        {/* <Header
           leftComponent={{ icon: 'menu', size: 30, color: '#fff' }}
           centerComponent={{ text: 'HOME', style: { color: '#fff', fontSize: 20 } }}
           rightComponent={
@@ -112,7 +112,7 @@ export default function HomeScreen({ route, navigation }) {
               </View>
             </TouchableOpacity>}
           containerStyle={styles.headerContainer}
-        />
+        /> */}
       </View>
       <View style={styles.container}>
         <ScrollView>

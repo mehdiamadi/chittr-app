@@ -87,7 +87,7 @@ function AppStackNav () {
           headerShown: false
         }}
       />
-      <Stack.Screen name='Sign In' component={SignInScreen} options={{ headerShown: false }} />
+      <Stack.Screen name='Sign In' component={SignInScreen} options={{ }} />
       <Stack.Screen name='Sign Up' component={SignUpScreen} />
       <Stack.Screen name='User' component={UserScreen} initialParams={{ token: globalUserToken, authID: globalUserID }} />
       <Stack.Screen name='Post' component={CreateChitScreen} />

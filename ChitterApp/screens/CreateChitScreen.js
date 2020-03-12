@@ -1,7 +1,7 @@
 import React from 'react'
 import { Text, View, TextInput, Button, PermissionsAndroid, TouchableOpacity, Alert } from 'react-native'
 import Geolocation from 'react-native-geolocation-service'
-import ImagePicker from 'react-native-image-picker'
+import { RNCamera } from 'react-native-camera'
 import { storeDrafts, getDrafts, deleteDraftAPI, storeNewDraft } from '../DraftsAPI'
 import styles from '../styles'
 const fetch = require('isomorphic-fetch')
@@ -90,38 +90,26 @@ export default function CreateChitScreen ({ route, navigation }) {
     }
   }
 
-  const showPicker = () => {
-    const options = {
-      noData: true
+  const takePicture = async () => {
+    if (this.camera) {
+      const options = { quality: 0.5, base64: true }
+      const data = await this.camera.takePictureAsync(options)
+      setPhoto(data)
     }
-    ImagePicker.launchImageLibrary(options, response => {
-      if (response.uri) {
-        setPhoto(response.uri)
-      }
-    })
   }
 
   const uploadPhoto = (chitID) => {
-    // Create the form data object
-    var data = new FormData() // eslint-disable-line no-undef
-    data.append('file', {
-      uri: photo,
-      name: 'file.jpg',
-      type: 'image/jpg'
-    })
-
     fetch('http://10.0.2.2:3333/api/v0.0.5/chits/' + chitID + '/photo',
       {
         method: 'POST',
         headers: {
-          // Accept: 'application/json',
-          // 'Content-Type': 'multipart/form-data;',
+          'Content-Type': 'image/jpeg',
           'X-Authorization': token
         },
-        body: data
+        body: photo
       })
       .then(response => {
-        console.log('upload succes', response)
+        console.log('upload success', response)
       })
       .catch(error => {
         console.log('upload error', error)
@@ -232,51 +220,63 @@ export default function CreateChitScreen ({ route, navigation }) {
   }
 
   return (
-    <View style={{ padding: 10 }}>
-      {draftContent == null ? ( // if chit is not a draft then dispaly normal text input
-        <TextInput
-          style={{ height: 40 }}
-          placeholder="What's on your mind?"
-          onChangeText={(chitContent) => setChitContent(chitContent)}
-          value={chitContent}
-        />
-      ) : ( // if chit is a draft then the value of the text input is the draft content
-        <TextInput
-          style={{ height: 40 }}
-          onChangeText={(chitContent) => setChitContent(chitContent)}
-          value={chitContent}
-        />
-      )}
-      <Button
-        onPress={postChit}
-        title='Post'
-      />
-      <Button
-        onPress={showPicker}
-        title='Upload Photo'
-      />
-      {draftIndex == null ? (
-        <Button
-          onPress={saveNewDraft}
-          title='Save as draft'
-        />
-      ) : (
-        <>
-          <Button
-            onPress={saveDraft}
-            title='Save draft'
+    <>
+      <View style={{ padding: 10 }}>
+        {draftContent == null ? ( // if chit is not a draft then dispaly normal text input
+          <TextInput
+            style={{ height: 40 }}
+            placeholder="What's on your mind?"
+            onChangeText={(chitContent) => setChitContent(chitContent)}
+            value={chitContent}
           />
-          <TouchableOpacity onPress={deleteDraft}>
-            <View>
-              <Text>Delete draft</Text>
-            </View>
-          </TouchableOpacity>
-        </>
-      )}
-      {/* <Button
-        onPress={scheduleChit}
-        title='Schedule Chit'
-      /> */}
-    </View>
+        ) : ( // if chit is a draft then the value of the text input is the draft content
+          <TextInput
+            style={{ height: 40 }}
+            onChangeText={(chitContent) => setChitContent(chitContent)}
+            value={chitContent}
+          />
+        )}
+        <Button
+          onPress={postChit}
+          title='Post'
+        />
+        <Button
+          onPress={takePicture}
+          title='Upload Photo'
+        />
+        {draftIndex == null ? (
+          <Button
+            onPress={saveNewDraft}
+            title='Save as draft'
+          />
+        ) : (
+          <>
+            <Button
+              onPress={saveDraft}
+              title='Save draft'
+            />
+            <TouchableOpacity onPress={deleteDraft}>
+              <View>
+                <Text>Delete draft</Text>
+              </View>
+            </TouchableOpacity>
+          </>
+        )}
+        {/* <Button
+          onPress={scheduleChit}
+          title='Schedule Chit'
+        /> */}
+      </View>
+      <RNCamera
+        ref={ref => {
+          this.camera = ref
+        }}
+        style={{
+          flex: 1,
+          justifyContent: 'flex-end',
+          alignItems: 'center'
+        }}
+      />
+    </>
   )
 }
