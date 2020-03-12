@@ -79,7 +79,18 @@ function SplashScreen () {
 
 function AppStackNav () {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator
+      screenOptions={{
+        headerTitleStyle: {
+          fontWeight: 'bold'
+        },
+        headerTitleAlign: 'center',
+        headerStyle: {
+          backgroundColor: '#000080'
+        },
+        headerTintColor: 'white'
+      }}
+    >
       <Stack.Screen
         name='Home'
         component={AppTabNav}
@@ -87,7 +98,8 @@ function AppStackNav () {
           headerShown: false
         }}
       />
-      <Stack.Screen name='Sign In' component={SignInScreen} options={{ }} />
+      <Stack.Screen
+        name='Sign In' component={SignInScreen} />
       <Stack.Screen name='Sign Up' component={SignUpScreen} />
       <Stack.Screen name='User' component={UserScreen} initialParams={{ token: globalUserToken, authID: globalUserID }} />
       <Stack.Screen name='Post' component={CreateChitScreen} />
@@ -106,7 +118,13 @@ function SignOut () {
 function AuthDrawerNav () {
   return (
     <NavigationContainer>
-      <Drawer.Navigator>
+      <Drawer.Navigator
+        drawerContentOptions={{
+          itemStyle: { backgroundColor: '#2D52CE', width: '100%', marginLeft: 0 },
+          labelStyle: { color: 'white' },
+          style: { backgroundColor: '#3460F2' }
+        }}
+      >
         <Drawer.Screen name='Home' component={AppStackNav} />
         <Drawer.Screen name='Profile' component={ProfileScreen} initialParams={{ userID: globalUserID, token: globalUserToken }} />
         <Drawer.Screen name='Drafts' component={DraftsScreen} initialParams={{ userID: globalUserID, token: globalUserToken }} />
@@ -123,8 +141,16 @@ function SignInStack ({ navigation }) {
         name='Sign In' component={SignInScreen}
         options={{
           headerLeft: () => (
-            <AIcon style={{ paddingLeft: 10 }} name='arrow-back' size={30} onPress={() => navigation.navigate('Home')} />
-          )
+            <AIcon style={{ paddingLeft: 10 }} name='arrow-back' size={30} color='white' onPress={() => navigation.navigate('Home')} />
+          ),
+          headerTitleStyle: {
+            fontWeight: 'bold'
+          },
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: '#000080'
+          },
+          headerTintColor: 'white'
         }}
       />
     </Stack.Navigator>
@@ -138,8 +164,16 @@ function SignUpStack ({ navigation }) {
         name='Sign Up' component={SignUpScreen}
         options={{
           headerLeft: () => (
-            <Icon style={{ paddingLeft: 10 }} name='angle-left' size={30} onPress={() => navigation.navigate('Home')} />
-          )
+            <AIcon style={{ paddingLeft: 10 }} name='arrow-back' color='white' size={30} onPress={() => navigation.navigate('Home')} />
+          ),
+          headerTitleStyle: {
+            fontWeight: 'bold'
+          },
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: '#000080'
+          },
+          headerTintColor: 'white'
         }}
       />
     </Stack.Navigator>
@@ -149,7 +183,13 @@ function SignUpStack ({ navigation }) {
 function AppDrawerNav () {
   return (
     <NavigationContainer>
-      <Drawer.Navigator>
+      <Drawer.Navigator
+        drawerContentOptions={{
+          itemStyle: { backgroundColor: '#2D52CE', width: '100%', marginLeft: 0 },
+          labelStyle: { color: 'white' },
+          style: { backgroundColor: '#3460F2' }
+        }}
+      >
         <Drawer.Screen name='Home' component={AppStackNav} />
         <Drawer.Screen name='Sign In' component={SignInStack} />
         <Drawer.Screen name='Sign Up' component={SignUpStack} />
@@ -167,8 +207,16 @@ function HomeStackNav ({ navigation }) {
           name='Home' component={HomeScreen} initialParams={{ token: globalUserToken }}
           options={{
             headerLeft: () => (
-              <Icon style={{ paddingLeft: 10 }} name='bars' size={30} onPress={() => navigation.openDrawer()} />
-            )
+              <Icon style={{ paddingLeft: 10 }} name='bars' color='white' size={30} onPress={() => navigation.openDrawer()} />
+            ),
+            headerTitleStyle: {
+              fontWeight: 'bold'
+            },
+            headerTitleAlign: 'center',
+            headerStyle: {
+              backgroundColor: '#000080'
+            },
+            headerTintColor: 'white'
           }}
         />
       ) : (
@@ -185,19 +233,22 @@ function HomeStackNav ({ navigation }) {
               <TouchableOpacity onPress={() => { navigation.navigate('Sign In') }} style={{ paddingRight: 10 }}>
                 <View style={{
                   backgroundColor: 'white',
-                  alignItems: 'center',
-                  justifyContent: 'center',
                   borderRadius: 10,
                   padding: 5
                 }}
                 >
-                  <Text>Sign In</Text>
+                  <Text style={{ fontWeight: 'bold', color: '#000080' }}>Sign In</Text>
                 </View>
               </TouchableOpacity>
             ),
+            headerTitleStyle: {
+              fontWeight: 'bold'
+            },
+            headerTitleAlign: 'center',
             headerStyle: {
-              backgroundColor: '#07439A'
-            }
+              backgroundColor: '#000080'
+            },
+            headerTintColor: 'white'
           }}
         />
       )}
@@ -212,8 +263,16 @@ function PostChitStackNav ({ navigation }) {
         name='Post' component={CreateChitScreen} initialParams={{ userID: globalUserID, token: globalUserToken }}
         options={{
           headerLeft: () => (
-            <Icon style={{ paddingLeft: 10 }} name='bars' size={30} onPress={() => navigation.openDrawer()} />
-          )
+            <Icon style={{ paddingLeft: 10 }} name='bars' color='white' size={30} onPress={() => navigation.openDrawer()} />
+          ),
+          headerTitleStyle: {
+            fontWeight: 'bold'
+          },
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: '#000080'
+          },
+          headerTintColor: 'white'
         }}
       />
     </Stack.Navigator>
@@ -227,8 +286,16 @@ function SearchStackNav ({ navigation }) {
         name='Search' component={SearchScreen}
         options={{
           headerLeft: () => (
-            <Icon style={{ paddingLeft: 10 }} name='bars' size={30} onPress={() => navigation.openDrawer()} />
-          )
+            <Icon style={{ paddingLeft: 10 }} name='bars' color='white' size={30} onPress={() => navigation.openDrawer()} />
+          ),
+          headerTitleStyle: {
+            fontWeight: 'bold'
+          },
+          headerTitleAlign: 'center',
+          headerStyle: {
+            backgroundColor: '#000080'
+          },
+          headerTintColor: 'white'
         }}
       />
     </Stack.Navigator>
@@ -237,7 +304,11 @@ function SearchStackNav ({ navigation }) {
 
 function AuthTabNav () {
   return (
-    <Tab.Navigator>
+    <Tab.Navigator
+      tabBarOptions={{
+        activeTintColor: '#000080'
+      }}
+    >
       <Tab.Screen
         options={{
           tabBarIcon: ({ color }) =>
@@ -277,7 +348,11 @@ function AuthTabNav () {
 
 function UnAuthTabNav () {
   return (
-    <Tab.Navigator>
+    <Tab.Navigator
+      tabBarOptions={{
+        activeTintColor: '#000080'
+      }}
+    >
       <Tab.Screen
         options={{
           tabBarIcon: ({ color }) =>

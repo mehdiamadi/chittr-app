@@ -1,27 +1,30 @@
 import React from 'react'
-import { ActivityIndicator, Text, View, StyleSheet, ScrollView, TouchableOpacity, Image, Button } from 'react-native'
+import { ActivityIndicator, View, ScrollView, TouchableOpacity } from 'react-native'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
+import { Avatar, Button, Text, Card, ListItem } from 'react-native-elements'
+import styles from '../styles'
 const fetch = require('isomorphic-fetch')
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 0,
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    flexShrink: 1
-  },
-  item: {
-    marginTop: 12,
-    padding: 30,
-    backgroundColor: 'white',
-    fontSize: 18
-  },
-  photo: {
-    width: 100,
-    height: 100,
-    alignItems: 'center'
-  }
-})
+// function FollowersScreen ({ route }) {
+//   const { followersData } = route.params
+//   return (
+//     <View>
+//       <ScrollView>
+//         {followersData.map((item) => {
+//           return (
+//             <View key={item.user_id}>
+//               <TouchableOpacity>
+//                 <View style={styles.item}>
+//                   <Text>{item.given_name}</Text>
+//                 </View>
+//               </TouchableOpacity>
+//             </View>
+//           )
+//         })}
+//       </ScrollView>
+//     </View>
+//   )
+// }
 
 function FollowersScreen ({ route }) {
   const { followersData } = route.params
@@ -31,11 +34,16 @@ function FollowersScreen ({ route }) {
         {followersData.map((item) => {
           return (
             <View key={item.user_id}>
-              <TouchableOpacity>
-                <View style={styles.item}>
-                  <Text>{item.given_name}</Text>
-                </View>
-              </TouchableOpacity>
+              <Card containerStyle={{ padding: 0 }}>
+                {
+                  <ListItem
+                    key={item.user_id}
+                    roundAvatar
+                    title={item.given_name}
+                    leftAvatar={{ source: { uri: 'http://10.0.2.2:3333/api/v0.0.5/user/' + item.user_id + '/photo' } }}
+                  />
+                }
+              </Card>
             </View>
           )
         })}
@@ -52,11 +60,16 @@ function FollowingScreen ({ route }) {
         {followingData.map((item) => {
           return (
             <View key={item.user_id}>
-              <TouchableOpacity>
-                <View style={styles.item}>
-                  <Text>{item.given_name}</Text>
-                </View>
-              </TouchableOpacity>
+              <Card containerStyle={{ padding: 0 }}>
+                {
+                  <ListItem
+                    key={item.user_id}
+                    roundAvatar
+                    title={item.given_name}
+                    leftAvatar={{ source: { uri: 'http://10.0.2.2:3333/api/v0.0.5/user/' + item.user_id + '/photo' } }}
+                  />
+                }
+              </Card>
             </View>
           )
         })}
@@ -88,8 +101,6 @@ export default function UserScreen ({ route, navigation }) {
           'X-Authorization': token
         })
       })
-
-    //checkIsFollowing(followers)
 
     if (isFollowing) {
       setIsFollowing(false)
@@ -157,16 +168,33 @@ export default function UserScreen ({ route, navigation }) {
   } else {
     return (
       <>
-        <View style={styles.container}>
-          <Text>{givenName}</Text>
-          <Image
+        <View style={styles.userContainer}>
+          <Text h4>{givenName}</Text>
+          <Avatar
+            rounded
             source={{ uri: 'http://10.0.2.2:3333/api/v0.0.5/user/' + userID + '/photo' }}
-            style={styles.photo}
+            size='large'
           />
           {token != null && userID !== authID && isFollowing === true
-            ? <Button title='Unfollow' onPress={() => followUser('DELETE')} />
+            ? <Button
+              title='Unfollow'
+              onPress={() => followUser('DELETE')}
+              buttonStyle={{
+                backgroundColor: 'red',
+                borderRadius: 15,
+                padding: 5
+              }}
+            />
             : (token != null && userID !== authID && isFollowing === false
-              ? <Button title='Follow' onPress={() => followUser('POST')} />
+              ? <Button
+                title='Follow'
+                onPress={() => followUser('POST')}
+                buttonStyle={{
+                  backgroundColor: '#000080',
+                  borderRadius: 15,
+                  padding: 5
+                }}
+                />
               : (null)
             )}
         </View>

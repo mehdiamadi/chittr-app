@@ -142,6 +142,7 @@ export default function HomeScreen ({ route, navigation }) {
                   title={item.user.given_name}
                   titleStyle={{ textAlign: 'left', paddingLeft: 10 }}
                   image={{ uri: 'http://10.0.2.2:3333/api/v0.0.5/chits/' + item.chit_id + '/photo' }}
+                  containerStyle={{ borderRadius: 5 }}
                 >
                   <Text style={{ marginBottom: 10 }}>
                     {getDate(item.timestamp)}

@@ -1,6 +1,7 @@
 import React from 'react'
 import { Text, TextInput, View, Button, Image, TouchableOpacity } from 'react-native'
 import { RNCamera } from 'react-native-camera'
+import { Avatar } from 'react-native-elements'
 import styles from '../styles'
 const fetch = require('isomorphic-fetch')
 
@@ -80,9 +81,12 @@ export default function ProfileScreen ({ route, navigation }) {
       <>
         <Text>{givenName}</Text>
 
-        <Image
+        <Avatar
+          rounded
           source={{ uri: 'http://10.0.2.2:3333/api/v0.0.5/user/' + userID + '/photo' }}
-          style={styles.photo}
+          size='xlarge'
+          showEditButton
+          onPress={() => setOpenCamera(true)}
         />
         <View style={{ padding: 10 }}>
           <TextInput

@@ -6,7 +6,12 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: 'white'
+  },
+  userContainer: {
+    flex: 0,
+    //flexDirection: 'row',
+    alignItems: 'flex-start'
   },
   signInContainer: {
     flex: 1,

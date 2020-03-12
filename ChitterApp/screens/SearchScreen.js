@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import { Text, View, ActivityIndicator, TextInput, Button, ScrollView, TouchableOpacity } from 'react-native'
+import { View, ActivityIndicator, ScrollView } from 'react-native'
+import { Card, ListItem, SearchBar } from 'react-native-elements'
 import styles from '../styles'
 const fetch = require('isomorphic-fetch')
 
@@ -34,33 +35,49 @@ export default class SearchScreen extends Component {
       )
     }
     return (
-      <View style={{ padding: 10 }}>
-        <TextInput
-          style={{ height: 40 }}
-          placeholder='username'
+      <View>
+        {/* <Input
+          placeholder='Search Username'
+          leftIcon={
+            <Icon
+              type='font-awesome'
+              name='search'
+              size={24}
+              color='black'
+              iconStyle={styles.signInIcons}
+            />
+          }
           onChangeText={(username) => this.setState({ username })}
           value={this.state.username}
-        />
-        <Button
-          onPress={() => this.searchUser()}
-          title='Search'
-          // color="lightgrey"
+          onSubmitEditing={this.searchUser()}
+        /> */}
+        <SearchBar
+          placeholder='Search Username...'
+          onChangeText={(username) => this.setState({ username })}
+          value={this.state.username}
+          platform='android'
+          onSubmitEditing={this.searchUser()}
         />
         <ScrollView>
           {this.state.usernames.map((item) => {
             return (
               <View key={item.user_id}>
-                <TouchableOpacity
-                  onPress={() => {
-                    this.props.navigation.navigate('User', {
-                      userID: item.user_id
-                    })
-                  }}
-                >
-                  <View style={styles.item}>
-                    <Text>{item.given_name}</Text>
-                  </View>
-                </TouchableOpacity>
+                <Card containerStyle={{ padding: 0 }}>
+                  {
+                    <ListItem
+                      key={item.user_id}
+                      roundAvatar
+                      title={item.given_name}
+                      leftAvatar={{ source: { uri: 'http://10.0.2.2:3333/api/v0.0.5/user/' + item.user_id + '/photo' } }}
+                      onPress={() => {
+                        this.props.navigation.navigate('User', {
+                          userID: item.user_id
+                        })
+                      }}
+                      chevron
+                    />
+                  }
+                </Card>
               </View>
             )
           })}
