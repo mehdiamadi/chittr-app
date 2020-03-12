@@ -76,6 +76,7 @@ export default function UserScreen ({ route, navigation }) {
   const [givenName, setGivenName] = React.useState('')
   const [followers, setFollowers] = React.useState([])
   const [following, setFollowing] = React.useState([])
+  const [isFollowing, setIsFollowing] = React.useState(false)
 
   const followUser = (method) => {
     fetch('http://10.0.2.2:3333/api/v0.0.5/user/' + userID + '/follow',
@@ -87,6 +88,14 @@ export default function UserScreen ({ route, navigation }) {
           'X-Authorization': token
         })
       })
+
+    //checkIsFollowing(followers)
+
+    if (isFollowing) {
+      setIsFollowing(false)
+    } else {
+      setIsFollowing(true)
+    }
   }
 
   const getUser = () => {
@@ -105,6 +114,7 @@ export default function UserScreen ({ route, navigation }) {
       .then((response) => response.json())
       .then((responseJson) => {
         setFollowers(responseJson)
+        checkIsFollowing(responseJson)
       })
       .catch((error) => {
         console.log(error)
@@ -123,29 +133,20 @@ export default function UserScreen ({ route, navigation }) {
       })
   }
 
-  const checkIsFollowing = () => {
+  const checkIsFollowing = (followers) => {
     for (var i = 0; i < Object.keys(followers).length; i++) {
       var user = followers[i]
       if (user.user_id === parseInt(authID)) {
-        return true
+        setIsFollowing(true)
       }
     }
   }
 
-  // React.useEffect(() => {
-  //     getUser();
-  //     getFollowers();
-  //     getFollowing();
-  // }, []);
-
-  React.useEffect(
-    () => navigation.addListener('focus', () =>
-      getUser(),
-    getFollowers(),
+  React.useEffect(() => {
+    getUser()
+    getFollowers()
     getFollowing()
-    ),
-    []
-  )
+  }, [])
 
   if (isLoading) {
     return (
@@ -162,10 +163,10 @@ export default function UserScreen ({ route, navigation }) {
             source={{ uri: 'http://10.0.2.2:3333/api/v0.0.5/user/' + userID + '/photo' }}
             style={styles.photo}
           />
-          {token != null && userID !== authID && checkIsFollowing()
-            ? <Button title='Unfollow' onPress={followUser('DELETE')} />
-            : (token != null && userID !== authID && !checkIsFollowing()
-              ? <Button title='Follow' onPress={followUser('POST')} />
+          {token != null && userID !== authID && isFollowing === true
+            ? <Button title='Unfollow' onPress={() => followUser('DELETE')} />
+            : (token != null && userID !== authID && isFollowing === false
+              ? <Button title='Follow' onPress={() => followUser('POST')} />
               : (null)
             )}
         </View>

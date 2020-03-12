@@ -1,10 +1,10 @@
 import React from 'react'
-import { Text, TextInput, View, Button, Image } from 'react-native'
+import { Text, TextInput, View, Button, Image, TouchableOpacity } from 'react-native'
 import { RNCamera } from 'react-native-camera'
 import styles from '../styles'
 const fetch = require('isomorphic-fetch')
 
-export default function ProfileScreen ({ route }) {
+export default function ProfileScreen ({ route, navigation }) {
   const [givenName, setGivenName] = React.useState('')
   const [familyName, setFamilyName] = React.useState('')
   const [emailAddress, setEmail] = React.useState('')
@@ -33,6 +33,7 @@ export default function ProfileScreen ({ route }) {
       const options = { quality: 0.5, base64: true }
       const data = await this.camera.takePictureAsync(options)
       setPhoto(data)
+      setOpenCamera(false)
     }
   }
 
@@ -71,60 +72,78 @@ export default function ProfileScreen ({ route }) {
           password: password
         })
       })
+    navigation.navigate('Home') // go back to the home screen
   }
 
   return (
-    <>
-      <View style={styles.container}>
+    openCamera === false ? (
+      <>
         <Text>{givenName}</Text>
 
         <Image
           source={{ uri: 'http://10.0.2.2:3333/api/v0.0.5/user/' + userID + '/photo' }}
           style={styles.photo}
         />
+        <View style={{ padding: 10 }}>
+          <TextInput
+            style={{ height: 40 }}
+            onChangeText={(givenName) => setGivenName(givenName)}
+            value={givenName}
+          />
+          <TextInput
+            style={{ height: 40 }}
+            onChangeText={(familyName) => setFamilyName(familyName)}
+            value={familyName}
+          />
+          <TextInput
+            style={{ height: 40 }}
+            onChangeText={(email) => setEmail(email)}
+            value={emailAddress}
+          />
+          <TextInput
+            style={{ height: 40 }}
+            placeholder='New password'
+            onChangeText={(password) => setPassword(password)}
+            value={password}
+          />
+          <Button
+            onPress={editUser}
+            title='Edit'
+          />
+          <Button
+            onPress={() => setOpenCamera(true)}
+            title='Upload New Photo'
+          />
+        </View>
+      </>
+    ) : (
+      <View style={styles.container}>
+        <RNCamera
+          captureAudio={false}
+          ref={ref => {
+            this.camera = ref
+          }}
+          style={styles.preview}
+        />
+        <View style={{ flex: 0, flexDirection: 'row', justifyContent: 'space-around' }}>
+          <TouchableOpacity
+            onPress={() => takePicture()}
+            style={styles.capture}
+          >
+            <Text style={{ fontSize: 16 }}>
+                CAPTURE
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => setOpenCamera(false)}
+            style={styles.capture}
+          >
+            <Text style={{ fontSize: 16 }}>
+                CANCEL
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
-
-      <View style={{ padding: 10 }}>
-        <TextInput
-          style={{ height: 40 }}
-          onChangeText={(givenName) => setGivenName(givenName)}
-          value={givenName}
-        />
-        <TextInput
-          style={{ height: 40 }}
-          onChangeText={(familyName) => setFamilyName(familyName)}
-          value={familyName}
-        />
-        <TextInput
-          style={{ height: 40 }}
-          onChangeText={(email) => setEmail(email)}
-          value={emailAddress}
-        />
-        <TextInput
-          style={{ height: 40 }}
-          placeholder='New password'
-          onChangeText={(password) => setPassword(password)}
-          value={password}
-        />
-        <Button
-          onPress={editUser}
-          title='Edit'
-        />
-        <Button
-          onPress={takePicture}
-          title='Upload New Photo'
-        />
-      </View>
-      <RNCamera
-        ref={ref => {
-          this.camera = ref
-        }}
-        style={{
-          flex: 1,
-          justifyContent: 'flex-end',
-          alignItems: 'center'
-        }}
-      />
-    </>
+    )
   )
 }

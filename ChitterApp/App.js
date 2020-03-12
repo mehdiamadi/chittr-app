@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, View, ActivityIndicator } from 'react-native'
+import { Button, View, ActivityIndicator, TouchableOpacity, Text } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { createDrawerNavigator } from '@react-navigation/drawer'
@@ -179,15 +179,25 @@ function HomeStackNav ({ navigation }) {
           initialParams={{ token: globalUserToken }}
           options={{
             headerLeft: () => (
-              <Icon style={{ paddingLeft: 10 }} name='bars' size={30} onPress={() => navigation.openDrawer()} />
+              <Icon style={{ paddingLeft: 10 }} name='bars' color='white' size={30} onPress={() => navigation.openDrawer()} />
             ),
             headerRight: () => (
-              <Button
-                onPress={() => navigation.navigate('Sign In')}
-                title='Sign In'
-                color='lightgrey'
-              />
-            )
+              <TouchableOpacity onPress={() => { navigation.navigate('Sign In') }} style={{ paddingRight: 10 }}>
+                <View style={{
+                  backgroundColor: 'white',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  borderRadius: 10,
+                  padding: 5
+                }}
+                >
+                  <Text>Sign In</Text>
+                </View>
+              </TouchableOpacity>
+            ),
+            headerStyle: {
+              backgroundColor: '#07439A'
+            }
           }}
         />
       )}

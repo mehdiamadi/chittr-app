@@ -20,6 +20,7 @@ export default function CreateChitScreen ({ route, navigation }) {
   const [familyName, setFamilyName] = React.useState('')
   const [emailAddress, setEmail] = React.useState('')
   const [photo, setPhoto] = React.useState(null)
+  const [openCamera, setOpenCamera] = React.useState(false)
 
   async function saveNewDraft () {
     var draft = ({
@@ -95,6 +96,7 @@ export default function CreateChitScreen ({ route, navigation }) {
       const options = { quality: 0.5, base64: true }
       const data = await this.camera.takePictureAsync(options)
       setPhoto(data)
+      setOpenCamera(false)
     }
   }
 
@@ -220,63 +222,83 @@ export default function CreateChitScreen ({ route, navigation }) {
   }
 
   return (
-    <>
-      <View style={{ padding: 10 }}>
-        {draftContent == null ? ( // if chit is not a draft then dispaly normal text input
-          <TextInput
-            style={{ height: 40 }}
-            placeholder="What's on your mind?"
-            onChangeText={(chitContent) => setChitContent(chitContent)}
-            value={chitContent}
-          />
-        ) : ( // if chit is a draft then the value of the text input is the draft content
-          <TextInput
-            style={{ height: 40 }}
-            onChangeText={(chitContent) => setChitContent(chitContent)}
-            value={chitContent}
-          />
-        )}
-        <Button
-          onPress={postChit}
-          title='Post'
-        />
-        <Button
-          onPress={takePicture}
-          title='Upload Photo'
-        />
-        {draftIndex == null ? (
-          <Button
-            onPress={saveNewDraft}
-            title='Save as draft'
-          />
-        ) : (
-          <>
-            <Button
-              onPress={saveDraft}
-              title='Save draft'
+    openCamera === false ? (
+      <>
+        <View style={{ padding: 10 }}>
+          {draftContent == null ? ( // if chit is not a draft then dispaly normal text input
+            <TextInput
+              style={{ height: 40 }}
+              placeholder="What's on your mind?"
+              onChangeText={(chitContent) => setChitContent(chitContent)}
+              value={chitContent}
             />
-            <TouchableOpacity onPress={deleteDraft}>
-              <View>
-                <Text>Delete draft</Text>
-              </View>
-            </TouchableOpacity>
-          </>
-        )}
-        {/* <Button
-          onPress={scheduleChit}
-          title='Schedule Chit'
-        /> */}
+          ) : ( // if chit is a draft then the value of the text input is the draft content
+            <TextInput
+              style={{ height: 40 }}
+              onChangeText={(chitContent) => setChitContent(chitContent)}
+              value={chitContent}
+            />
+          )}
+          <Button
+            onPress={postChit}
+            title='Post'
+          />
+          <Button
+            onPress={() => setOpenCamera(true)}
+            title='Upload Photo'
+          />
+          {draftIndex == null ? (
+            <Button
+              onPress={saveNewDraft}
+              title='Save as draft'
+            />
+          ) : (
+            <>
+              <Button
+                onPress={saveDraft}
+                title='Save draft'
+              />
+              <TouchableOpacity onPress={deleteDraft}>
+                <View>
+                  <Text>Delete draft</Text>
+                </View>
+              </TouchableOpacity>
+            </>
+          )}
+          {/* <Button
+            onPress={scheduleChit}
+            title='Schedule Chit'
+          /> */}
+        </View>
+      </>
+    ) : (
+      <View style={styles.container}>
+        <RNCamera
+          captureAudio={false}
+          ref={ref => {
+            this.camera = ref
+          }}
+          style={styles.preview}
+        />
+        <View style={{ flex: 0, flexDirection: 'row', justifyContent: 'space-around' }}>
+          <TouchableOpacity
+            onPress={() => takePicture()}
+            style={styles.capture}
+          >
+            <Text style={{ fontSize: 16 }}>
+                CAPTURE
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => setOpenCamera(false)}
+            style={styles.capture}
+          >
+            <Text style={{ fontSize: 16 }}>
+                CANCEL
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
-      <RNCamera
-        ref={ref => {
-          this.camera = ref
-        }}
-        style={{
-          flex: 1,
-          justifyContent: 'flex-end',
-          alignItems: 'center'
-        }}
-      />
-    </>
+    )
   )
 }
