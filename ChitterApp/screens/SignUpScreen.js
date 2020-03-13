@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { TextInput, View, Button } from 'react-native'
-import styles from '../styles'
+import Styles from '../Styles'
 const fetch = require('isomorphic-fetch')
 
 export default class SignUpScreen extends Component {

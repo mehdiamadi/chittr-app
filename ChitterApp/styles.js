@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
   },
   signInTitle: {
     alignSelf: 'center',
-    paddingTop: 50
+    paddingBottom: 80
   },
   item: {
     marginTop: 12,

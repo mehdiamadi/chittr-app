@@ -1,9 +1,10 @@
 import React from 'react'
-import { Text, View, TextInput, Button, PermissionsAndroid, TouchableOpacity, Alert } from 'react-native'
+import { Text, View, TextInput, PermissionsAndroid, TouchableOpacity, Alert } from 'react-native'
+import { Button } from 'react-native-elements'
 import Geolocation from 'react-native-geolocation-service'
 import { RNCamera } from 'react-native-camera'
 import { storeDrafts, getDrafts, deleteDraftAPI, storeNewDraft } from '../DraftsAPI'
-import styles from '../styles'
+import Styles from '../Styles'
 const fetch = require('isomorphic-fetch')
 
 export default function CreateChitScreen ({ route, navigation }) {
@@ -21,6 +22,20 @@ export default function CreateChitScreen ({ route, navigation }) {
   const [emailAddress, setEmail] = React.useState('')
   const [photo, setPhoto] = React.useState(null)
   const [openCamera, setOpenCamera] = React.useState(false)
+
+  navigation.setOptions({
+    headerRight: () => (
+      <Button
+        onPress={() => postChit()}
+        icon={{
+          name: 'check',
+          size: 30,
+          color: 'white'
+        }}
+        buttonStyle={{ paddingRight: 10, backgroundColor: '#000080' }}
+      />
+    )
+  })
 
   async function saveNewDraft () {
     var draft = ({
@@ -239,10 +254,10 @@ export default function CreateChitScreen ({ route, navigation }) {
               value={chitContent}
             />
           )}
-          <Button
+          {/* <Button
             onPress={postChit}
             title='Post'
-          />
+          /> */}
           <Button
             onPress={() => setOpenCamera(true)}
             title='Upload Photo'
@@ -272,18 +287,18 @@ export default function CreateChitScreen ({ route, navigation }) {
         </View>
       </>
     ) : (
-      <View style={styles.container}>
+      <View style={Styles.container}>
         <RNCamera
           captureAudio={false}
           ref={ref => {
             this.camera = ref
           }}
-          style={styles.preview}
+          style={Styles.preview}
         />
         <View style={{ flex: 0, flexDirection: 'row', justifyContent: 'space-around' }}>
           <TouchableOpacity
             onPress={() => takePicture()}
-            style={styles.capture}
+            style={Styles.capture}
           >
             <Text style={{ fontSize: 16 }}>
                 CAPTURE
@@ -291,7 +306,7 @@ export default function CreateChitScreen ({ route, navigation }) {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => setOpenCamera(false)}
-            style={styles.capture}
+            style={Styles.capture}
           >
             <Text style={{ fontSize: 16 }}>
                 CANCEL

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { View, ActivityIndicator, ScrollView } from 'react-native'
 import { Card, ListItem, SearchBar } from 'react-native-elements'
-import styles from '../styles'
+import Styles from '../Styles'
 const fetch = require('isomorphic-fetch')
 
 export default class SearchScreen extends Component {
@@ -56,7 +56,7 @@ export default class SearchScreen extends Component {
           onChangeText={(username) => this.setState({ username })}
           value={this.state.username}
           platform='android'
-          onSubmitEditing={this.searchUser()}
+          onSubmitEditing={() => { this.searchUser() }}
         />
         <ScrollView>
           {this.state.usernames.map((item) => {

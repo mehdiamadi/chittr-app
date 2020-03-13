@@ -2,7 +2,8 @@ import React from 'react'
 import { View, Alert } from 'react-native'
 import { AuthContext } from '../Context'
 import { Input, Button, Text, Icon } from 'react-native-elements'
-import styles from '../styles'
+import { setUserToken } from '../Authentication'
+import Styles from '../Styles'
 const fetch = require('isomorphic-fetch')
 
 export default function LoginScreens ({ navigation }) {
@@ -33,8 +34,9 @@ export default function LoginScreens ({ navigation }) {
     )
       .then(response => response.json())
       .then(responseJson => {
-        setToken(responseJson.token)
-        setUserID(responseJson.id)
+        signIn(responseJson.token, responseJson.id)
+        // setToken(responseJson.token)
+        // setUserID(responseJson.id)
       })
       .catch((error) => {
         console.log(error)
@@ -43,9 +45,9 @@ export default function LoginScreens ({ navigation }) {
     // }
   }
 
-  if (token !== '' && userID !== '') {
-    signIn(token, userID)
-  }
+  // if (token !== '' && userID !== '') {
+  //   signIn(token, userID)
+  // }
 
   return (
     <>
@@ -56,8 +58,8 @@ export default function LoginScreens ({ navigation }) {
           containerStyle={styles.headerContainer}
         />
       </View> */}
-      <View style={styles.signInContainer}>
-        <Text h1 style={styles.signInTitle}>Chittr</Text>
+      <View style={Styles.signInContainer}>
+        <Text h1 style={Styles.signInTitle}>Chittr</Text>
         <Input
           placeholder='Email Address'
           leftIcon={
@@ -66,7 +68,7 @@ export default function LoginScreens ({ navigation }) {
               name='envelope'
               size={24}
               color='black'
-              iconStyle={styles.signInIcons}
+              iconStyle={Styles.signInIcons}
             />
           }
           onChangeText={(email) => setEmail(email)}
@@ -92,7 +94,7 @@ export default function LoginScreens ({ navigation }) {
           onPress={getToken}
           title='Sign In'
           type='solid'
-          buttonStyle={{ marginTop: 100 }}
+          buttonStyle={{ marginTop: 100, backgroundColor: '#000080' }}
         />
         <Button
           onPress={() => navigation.navigate('Sign Up')}

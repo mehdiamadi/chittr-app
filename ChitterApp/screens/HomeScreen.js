@@ -1,7 +1,6 @@
 import React from 'react'
 import { ScrollView, ActivityIndicator, Text, View, RefreshControl } from 'react-native'
-import { useFocusEffect } from '@react-navigation/native'
-import styles from '../styles'
+import styles from '../Styles'
 import { Card } from 'react-native-elements'
 const fetch = require('isomorphic-fetch')
 
@@ -62,16 +61,13 @@ export default function HomeScreen ({ route, navigation }) {
     }
   }
 
-  useFocusEffect(
-    React.useCallback(() => {
-      const unsubscribe = navigation.addListener('focus', () => {
-        getData()
-      })
-
-      // Return the function to unsubscribe from the event so it gets removed on unmount
-      return unsubscribe
-    }, [])
-  )
+  React.useEffect(() => {
+    const update = navigation.addListener('focus', () => {
+      getData()
+    })
+    // Return the function to update from the event so it gets removed on unmount
+    return update
+  }, [])
 
   if (isLoading) {
     return (

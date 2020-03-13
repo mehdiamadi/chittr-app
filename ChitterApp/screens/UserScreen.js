@@ -1,8 +1,8 @@
 import React from 'react'
-import { ActivityIndicator, View, ScrollView, TouchableOpacity } from 'react-native'
+import { ActivityIndicator, View, ScrollView } from 'react-native'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
 import { Avatar, Button, Text, Card, ListItem } from 'react-native-elements'
-import styles from '../styles'
+import Styles from '../Styles'
 const fetch = require('isomorphic-fetch')
 
 // function FollowersScreen ({ route }) {
@@ -168,7 +168,7 @@ export default function UserScreen ({ route, navigation }) {
   } else {
     return (
       <>
-        <View style={styles.userContainer}>
+        <View style={Styles.userContainer}>
           <Text h4>{givenName}</Text>
           <Avatar
             rounded
@@ -184,7 +184,7 @@ export default function UserScreen ({ route, navigation }) {
                 borderRadius: 15,
                 padding: 5
               }}
-            />
+              />
             : (token != null && userID !== authID && isFollowing === false
               ? <Button
                 title='Follow'
@@ -194,7 +194,7 @@ export default function UserScreen ({ route, navigation }) {
                   borderRadius: 15,
                   padding: 5
                 }}
-                />
+              />
               : (null)
             )}
         </View>

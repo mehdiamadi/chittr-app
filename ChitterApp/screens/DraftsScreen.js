@@ -1,7 +1,7 @@
 import React from 'react'
 import { ScrollView, ActivityIndicator, Text, View, TouchableOpacity } from 'react-native'
 import { getDrafts } from '../DraftsAPI'
-import styles from '../styles'
+import Styles from '../Styles'
 
 export default function DraftsScreen ({ route, navigation }) {
   const { userID } = route.params
@@ -37,7 +37,7 @@ export default function DraftsScreen ({ route, navigation }) {
   }
 
   return (
-    <View style={styles.container}>
+    <View style={Styles.container}>
       {draftsData == null ? (
         <Text>No drafts</Text>
       ) : (
@@ -58,8 +58,8 @@ export default function DraftsScreen ({ route, navigation }) {
                     })
                   }}
                 >
-                  <View style={styles.item}>
-                    <Text style={styles.item}>
+                  <View style={Styles.item}>
+                    <Text style={Styles.item}>
                       {item.chit_content}
                     </Text>
                   </View>

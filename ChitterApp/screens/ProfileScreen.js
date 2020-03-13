@@ -1,8 +1,8 @@
 import React from 'react'
-import { Text, TextInput, View, Button, Image, TouchableOpacity } from 'react-native'
+import { Text, TextInput, View, Button, TouchableOpacity } from 'react-native'
 import { RNCamera } from 'react-native-camera'
 import { Avatar } from 'react-native-elements'
-import styles from '../styles'
+import Styles from '../Styles'
 const fetch = require('isomorphic-fetch')
 
 export default function ProfileScreen ({ route, navigation }) {
@@ -121,18 +121,18 @@ export default function ProfileScreen ({ route, navigation }) {
         </View>
       </>
     ) : (
-      <View style={styles.container}>
+      <View style={Styles.container}>
         <RNCamera
           captureAudio={false}
           ref={ref => {
             this.camera = ref
           }}
-          style={styles.preview}
+          style={Styles.preview}
         />
         <View style={{ flex: 0, flexDirection: 'row', justifyContent: 'space-around' }}>
           <TouchableOpacity
             onPress={() => takePicture()}
-            style={styles.capture}
+            style={Styles.capture}
           >
             <Text style={{ fontSize: 16 }}>
                 CAPTURE
@@ -140,7 +140,7 @@ export default function ProfileScreen ({ route, navigation }) {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => setOpenCamera(false)}
-            style={styles.capture}
+            style={Styles.capture}
           >
             <Text style={{ fontSize: 16 }}>
                 CANCEL
