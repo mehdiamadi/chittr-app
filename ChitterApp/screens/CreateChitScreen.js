@@ -40,7 +40,7 @@ export default function CreateChitScreen ({ route, navigation }) {
   })
 
   // Save a draft if no drafts currently exist in local storage
-  async function saveNewDraft (draftIndex) {
+  async function saveNewDraft () {
     var draft = ({
       timestamp: new Date().getTime(),
       chit_content: chitContent,
@@ -63,7 +63,8 @@ export default function CreateChitScreen ({ route, navigation }) {
             draft
           ]
           storeDrafts(JSON.stringify(draftData))
-        } else if (draftIndex != null) {
+        } else if (draftIndex !== undefined) {
+          console.log(draftIndex)
           editDraft(draftIndex, draft)
         } else {
           storeNewDraft(draft)
@@ -259,7 +260,7 @@ export default function CreateChitScreen ({ route, navigation }) {
           ) : (
             <>
               <Button
-                onPress={saveNewDraft(draftIndex)}
+                onPress={saveNewDraft}
                 title='Save draft'
               />
               <Button

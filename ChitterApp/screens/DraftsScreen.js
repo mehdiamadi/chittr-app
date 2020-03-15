@@ -39,7 +39,9 @@ export default function DraftsScreen ({ route, navigation }) {
   return (
     <View style={Styles.container}>
       {draftsData == null ? (
-        <Text>No drafts</Text>
+        <View style={{ flex: 1, justifyContent: 'center', alignSelf: 'center' }}>
+          <Text>No drafts</Text>
+        </View>
       ) : (
         <ScrollView>
           {draftsData.map((item, index) => {
