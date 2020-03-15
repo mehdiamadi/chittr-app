@@ -1,5 +1,17 @@
 import AsyncStorage from '@react-native-community/async-storage'
 
+export const editDraft = async (draftIndex, draft) => {
+  try {
+    getDrafts().then(result => {
+      var tempDrafts = JSON.parse(result)
+      tempDrafts[draftIndex] = draft
+      storeDrafts(JSON.stringify(tempDrafts))
+    })
+  } catch (e) {
+    console.log(e)
+  }
+}
+
 export const storeNewDraft = async (draft) => {
   try {
     getDrafts().then(result => {

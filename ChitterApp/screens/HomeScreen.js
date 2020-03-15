@@ -5,7 +5,7 @@ import { Card } from 'react-native-elements'
 const fetch = require('isomorphic-fetch')
 
 export default function HomeScreen ({ route, navigation }) {
-  const [isLoading, setIsLoading] = React.useState(false)
+  const [isLoading, setIsLoading] = React.useState(true)
   const [chitData, setChitData] = React.useState([])
   const [refreshing, setRefreshing] = React.useState(false)
 
@@ -31,7 +31,7 @@ export default function HomeScreen ({ route, navigation }) {
 
   const getData = async () => {
     if (token === null) {
-      fetch('http://10.0.2.2:3333/api/v0.0.5/chits')
+      fetch('http://10.0.2.2:3333/api/v0.0.5/chits?start=0&count=end')
         .then((response) => response.json())
         .then((responseJson) => {
           setIsLoading(false)
@@ -41,7 +41,7 @@ export default function HomeScreen ({ route, navigation }) {
           console.log(error)
         })
     } else {
-      fetch('http://10.0.2.2:3333/api/v0.0.5/chits',
+      fetch('http://10.0.2.2:3333/api/v0.0.5/chits?start=0&count=end',
         {
           method: 'GET',
           headers: {

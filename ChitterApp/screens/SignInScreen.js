@@ -2,16 +2,13 @@ import React from 'react'
 import { View, Alert } from 'react-native'
 import { AuthContext } from '../Context'
 import { Input, Button, Text, Icon } from 'react-native-elements'
-import { setUserToken } from '../Authentication'
 import Styles from '../Styles'
 const fetch = require('isomorphic-fetch')
 
 export default function LoginScreens ({ navigation }) {
   const { signIn } = React.useContext(AuthContext)
-  const [userID, setUserID] = React.useState('')
   const [email, setEmail] = React.useState('j.smith@mail.com')
   const [password, setPassword] = React.useState('password')
-  const [token, setToken] = React.useState('')
 
   const enabled = email.length > 0 && password.length > 0
   const getToken = async () => {

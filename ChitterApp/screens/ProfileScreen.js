@@ -114,10 +114,6 @@ export default function ProfileScreen ({ route, navigation }) {
             onPress={editUser}
             title='Edit'
           />
-          <Button
-            onPress={() => setOpenCamera(true)}
-            title='Upload New Photo'
-          />
         </View>
       </>
     ) : (

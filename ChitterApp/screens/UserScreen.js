@@ -80,16 +80,14 @@ function FollowingScreen ({ route }) {
 
 const Tab = createMaterialTopTabNavigator()
 
-export default function UserScreen ({ route, navigation }) {
+export default function UserScreen ({ route }) {
   const { token } = route.params
   const { userID } = route.params
-  const { authID } = route.params
 
   const [isLoading, setIsLoading] = React.useState(true)
   const [givenName, setGivenName] = React.useState('')
   const [followers, setFollowers] = React.useState([])
   const [following, setFollowing] = React.useState([])
-  const [isFollowing, setIsFollowing] = React.useState(false)
 
   const followUser = (method) => {
     fetch('http://10.0.2.2:3333/api/v0.0.5/user/' + userID + '/follow',
@@ -101,12 +99,6 @@ export default function UserScreen ({ route, navigation }) {
           'X-Authorization': token
         })
       })
-
-    if (isFollowing) {
-      setIsFollowing(false)
-    } else {
-      setIsFollowing(true)
-    }
   }
 
   const getUser = () => {
@@ -125,7 +117,6 @@ export default function UserScreen ({ route, navigation }) {
       .then((response) => response.json())
       .then((responseJson) => {
         setFollowers(responseJson)
-        checkIsFollowing(responseJson)
       })
       .catch((error) => {
         console.log(error)
@@ -142,15 +133,6 @@ export default function UserScreen ({ route, navigation }) {
       .catch((error) => {
         console.log(error)
       })
-  }
-
-  const checkIsFollowing = (followers) => {
-    for (var i = 0; i < Object.keys(followers).length; i++) {
-      var user = followers[i]
-      if (user.user_id === parseInt(authID)) {
-        setIsFollowing(true)
-      }
-    }
   }
 
   React.useEffect(() => {
@@ -175,28 +157,6 @@ export default function UserScreen ({ route, navigation }) {
             source={{ uri: 'http://10.0.2.2:3333/api/v0.0.5/user/' + userID + '/photo' }}
             size='large'
           />
-          {token != null && userID !== authID && isFollowing === true
-            ? <Button
-              title='Unfollow'
-              onPress={() => followUser('DELETE')}
-              buttonStyle={{
-                backgroundColor: 'red',
-                borderRadius: 15,
-                padding: 5
-              }}
-              />
-            : (token != null && userID !== authID && isFollowing === false
-              ? <Button
-                title='Follow'
-                onPress={() => followUser('POST')}
-                buttonStyle={{
-                  backgroundColor: '#000080',
-                  borderRadius: 15,
-                  padding: 5
-                }}
-              />
-              : (null)
-            )}
         </View>
 
         <Tab.Navigator>

@@ -22,12 +22,9 @@ import { getToken, removeToken, setLocalToken } from './Authentication'
 const Tab = createBottomTabNavigator()
 const Drawer = createDrawerNavigator()
 const Stack = createStackNavigator()
-// var loggedIn = false
-// var globalUserID = null
-// var globalUserToken = getToken()
 
 export default function ChittrApp () {
-  const [isLoading, setIsLoading] = React.useState(false)
+  const [isLoading, setIsLoading] = React.useState(true)
   const [userToken, setUserToken] = React.useState(null)
   const [userID, setUserID] = React.useState(null)
 
@@ -53,7 +50,6 @@ export default function ChittrApp () {
 
   const getAsyncToken = async () => {
     getToken().then(result => {
-      //console.log('user = ' + JSON.stringify(result))
       if (result !== null) {
         setUserToken(result.token)
         setUserID(result.userID)
@@ -61,6 +57,7 @@ export default function ChittrApp () {
         setUserToken(null)
         setUserID(null)
       }
+      setIsLoading(false)
     })
   }
 
@@ -75,7 +72,6 @@ export default function ChittrApp () {
           token: token,
           userID: userID
         }
-        console.log(user)
         setIsLoading(false)
         createToken(user)
       },
@@ -136,7 +132,7 @@ export default function ChittrApp () {
         />
         <Stack.Screen name='Sign In' component={SignInScreen} />
         <Stack.Screen name='Sign Up' component={SignUpScreen} />
-        <Stack.Screen name='User' component={UserScreen} initialParams={{ token: userToken, authID: userID }} />
+        <Stack.Screen name='User' component={UserScreen} initialParams={{ token: userToken }} />
         <Stack.Screen name='Post' component={CreateChitScreen} />
         <Stack.Screen name='Drafts' component={DraftsScreen} />
       </Stack.Navigator>
@@ -318,7 +314,7 @@ export default function ChittrApp () {
     return (
       <Stack.Navigator>
         <Stack.Screen
-          name='Search' component={SearchScreen}
+          name='Search' component={SearchScreen} initialParams={{ userID: userID, token: userToken }}
           options={{
             headerLeft: () => (
               <Icon iconStyle={{ paddingLeft: 10 }} type='font-awesome' name='bars' color='white' size={30} onPress={() => navigation.openDrawer()} />

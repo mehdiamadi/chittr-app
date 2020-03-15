@@ -3,16 +3,17 @@ import { Text, View, TextInput, PermissionsAndroid, TouchableOpacity, Alert } fr
 import { Button } from 'react-native-elements'
 import Geolocation from 'react-native-geolocation-service'
 import { RNCamera } from 'react-native-camera'
-import { storeDrafts, getDrafts, deleteDraftAPI, storeNewDraft } from '../DraftsAPI'
+import { storeDrafts, getDrafts, deleteDraftAPI, storeNewDraft, editDraft } from '../DraftsAPI'
 import Styles from '../Styles'
 const fetch = require('isomorphic-fetch')
 
 export default function CreateChitScreen ({ route, navigation }) {
+  // Get params
   const { userID } = route.params
   const { token } = route.params
   const { draftIndex } = route.params
   const { draftContent } = route.params
-
+  // Declare new state variables
   const [locationPermission, setLocationPermission] = React.useState(false)
   const [latitude, setLatitude] = React.useState()
   const [longitude, setLongitude] = React.useState()
@@ -23,6 +24,7 @@ export default function CreateChitScreen ({ route, navigation }) {
   const [photo, setPhoto] = React.useState(null)
   const [openCamera, setOpenCamera] = React.useState(false)
 
+  // Add check icon on the right of the header that calls the postChit method when pressed
   navigation.setOptions({
     headerRight: () => (
       <Button
@@ -37,7 +39,8 @@ export default function CreateChitScreen ({ route, navigation }) {
     )
   })
 
-  async function saveNewDraft () {
+  // Save a draft if no drafts currently exist in local storage
+  async function saveNewDraft (draftIndex) {
     var draft = ({
       timestamp: new Date().getTime(),
       chit_content: chitContent,
@@ -60,6 +63,8 @@ export default function CreateChitScreen ({ route, navigation }) {
             draft
           ]
           storeDrafts(JSON.stringify(draftData))
+        } else if (draftIndex != null) {
+          editDraft(draftIndex, draft)
         } else {
           storeNewDraft(draft)
         }
@@ -67,34 +72,7 @@ export default function CreateChitScreen ({ route, navigation }) {
     } catch (e) {
       // saving error
     }
-
     navigation.navigate('Home')
-  }
-
-  async function saveDraft () {
-    var draft = ({
-      timestamp: new Date().getTime(),
-      chit_content: chitContent,
-      location: ({
-        longitude: longitude,
-        latitude: latitude
-      }),
-      user: ({
-        user_id: parseInt(userID),
-        given_name: givenName,
-        family_name: familyName,
-        email: emailAddress
-      })
-    })
-
-    try {
-      getDrafts().then(result => {
-        storeDrafts(result.push(draft))
-        Alert.alert('saved')
-      })
-    } catch (e) {
-      console.log(e)
-    }
   }
 
   async function deleteDraft () {
@@ -180,6 +158,10 @@ export default function CreateChitScreen ({ route, navigation }) {
   }
 
   React.useEffect(() => {
+    const update = navigation.addListener('blur', () => {
+      setChitContent('')
+    })
+
     fetch('http://10.0.2.2:3333/api/v0.0.5/user/' + userID)
       .then((response) => response.json())
       .then((responseJson) => {
@@ -194,6 +176,7 @@ export default function CreateChitScreen ({ route, navigation }) {
     if (draftContent !== undefined) {
       setChitContent(draftContent)
     }
+    return update
   }, [findCoordinates()])
 
   const postChit = () => {
@@ -237,6 +220,14 @@ export default function CreateChitScreen ({ route, navigation }) {
   }
 
   return (
+    {
+      ...navigation.setOptions({
+        headerShown: true
+      }),
+      ...navigation.dangerouslyGetParent().setOptions({
+        tabBarVisible: true
+      })
+    },
     openCamera === false ? (
       <>
         <View style={{ padding: 10 }}>
@@ -246,18 +237,16 @@ export default function CreateChitScreen ({ route, navigation }) {
               placeholder="What's on your mind?"
               onChangeText={(chitContent) => setChitContent(chitContent)}
               value={chitContent}
+              maxLength={141}
             />
           ) : ( // if chit is a draft then the value of the text input is the draft content
             <TextInput
               style={{ height: 40 }}
               onChangeText={(chitContent) => setChitContent(chitContent)}
               value={chitContent}
+              maxLength={141}
             />
           )}
-          {/* <Button
-            onPress={postChit}
-            title='Post'
-          /> */}
           <Button
             onPress={() => setOpenCamera(true)}
             title='Upload Photo'
@@ -270,23 +259,38 @@ export default function CreateChitScreen ({ route, navigation }) {
           ) : (
             <>
               <Button
-                onPress={saveDraft}
+                onPress={saveNewDraft(draftIndex)}
                 title='Save draft'
               />
-              <TouchableOpacity onPress={deleteDraft}>
-                <View>
-                  <Text>Delete draft</Text>
-                </View>
-              </TouchableOpacity>
+              <Button
+                // onPress={deleteDraft}
+                onPress={() =>
+                  Alert.alert(
+                    'Confirm',
+                    'Are you sure you want to delete this draft?',
+                    [
+                      {
+                        text: 'Cancel',
+                        style: 'cancel'
+                      },
+                      { text: 'OK', onPress: () => deleteDraft() }
+                    ]
+                  )}
+                title='Delete draft'
+              />
             </>
           )}
-          {/* <Button
-            onPress={scheduleChit}
-            title='Schedule Chit'
-          /> */}
         </View>
       </>
     ) : (
+      {
+        ...navigation.setOptions({
+          headerShown: false
+        }),
+        ...navigation.dangerouslyGetParent().setOptions({
+          tabBarVisible: false
+        })
+      },
       <View style={Styles.container}>
         <RNCamera
           captureAudio={false}
@@ -301,7 +305,7 @@ export default function CreateChitScreen ({ route, navigation }) {
             style={Styles.capture}
           >
             <Text style={{ fontSize: 16 }}>
-                CAPTURE
+            CAPTURE
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
