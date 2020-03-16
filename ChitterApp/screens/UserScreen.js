@@ -1,30 +1,9 @@
 import React from 'react'
 import { ActivityIndicator, View, ScrollView } from 'react-native'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
-import { Avatar, Button, Text, Card, ListItem } from 'react-native-elements'
+import { Avatar, Text, Card, ListItem } from 'react-native-elements'
 import Styles from '../Styles'
 const fetch = require('isomorphic-fetch')
-
-// function FollowersScreen ({ route }) {
-//   const { followersData } = route.params
-//   return (
-//     <View>
-//       <ScrollView>
-//         {followersData.map((item) => {
-//           return (
-//             <View key={item.user_id}>
-//               <TouchableOpacity>
-//                 <View style={styles.item}>
-//                   <Text>{item.given_name}</Text>
-//                 </View>
-//               </TouchableOpacity>
-//             </View>
-//           )
-//         })}
-//       </ScrollView>
-//     </View>
-//   )
-// }
 
 function FollowersScreen ({ route }) {
   const { followersData } = route.params
@@ -81,25 +60,12 @@ function FollowingScreen ({ route }) {
 const Tab = createMaterialTopTabNavigator()
 
 export default function UserScreen ({ route }) {
-  const { token } = route.params
   const { userID } = route.params
 
   const [isLoading, setIsLoading] = React.useState(true)
   const [givenName, setGivenName] = React.useState('')
   const [followers, setFollowers] = React.useState([])
   const [following, setFollowing] = React.useState([])
-
-  const followUser = (method) => {
-    fetch('http://10.0.2.2:3333/api/v0.0.5/user/' + userID + '/follow',
-      {
-        method: method,
-        headers: ({
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-          'X-Authorization': token
-        })
-      })
-  }
 
   const getUser = () => {
     fetch('http://10.0.2.2:3333/api/v0.0.5/user/' + userID)

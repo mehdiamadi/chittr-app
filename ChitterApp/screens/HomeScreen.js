@@ -1,8 +1,48 @@
-import React from 'react'
-import { ScrollView, ActivityIndicator, Text, View, RefreshControl } from 'react-native'
-import styles from '../Styles'
+import React, { Component } from 'react'
+import { ScrollView, ActivityIndicator, Text, View, RefreshControl, Image } from 'react-native'
+import Styles from '../Styles'
 import { Card } from 'react-native-elements'
 const fetch = require('isomorphic-fetch')
+
+class Chit extends Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      style: { width: undefined, height: undefined, aspectRatio: 1, resizeMode: 'cover' }
+    }
+  }
+
+  getDate (epoch) {
+    var date = new Date(epoch)
+    var strDate = 'd/m/y'
+      .replace('d', date.getDate())
+      .replace('y', date.getFullYear())
+      .replace('m', date.getMonth() + 1)
+    return strDate
+  }
+
+  render () {
+    return (
+      <Card
+        title={this.props.item.user.given_name}
+        titleStyle={{ textAlign: 'left', paddingLeft: 10 }}
+        containerStyle={{ borderRadius: 5 }}
+      >
+        <Image
+          style={this.state.style}
+          source={{ uri: 'http://10.0.2.2:3333/api/v0.0.5/chits/' + this.props.item.chit_id + '/photo' }}
+          onError={() => this.setState({ style: {} })}
+        />
+        <Text style={{ marginBottom: 10 }}>
+          {this.getDate(this.props.item.timestamp)}
+        </Text>
+        <Text style={{ marginBottom: 10 }}>
+          {this.props.item.chit_content}
+        </Text>
+      </Card>
+    )
+  }
+}
 
 export default function HomeScreen ({ route, navigation }) {
   const [isLoading, setIsLoading] = React.useState(true)
@@ -19,19 +59,9 @@ export default function HomeScreen ({ route, navigation }) {
     })
   }, [refreshing])
 
-  const getDate = (epoch) => {
-    var date = new Date(epoch)
-    var strDate = 'd/m/y'
-      .replace('d', date.getDate())
-      .replace('y', date.getFullYear())
-      .replace('m', date.getMonth() + 1)
-
-    return strDate
-  }
-
   const getData = async () => {
     if (token === null) {
-      fetch('http://10.0.2.2:3333/api/v0.0.5/chits?start=0&count=end')
+      return fetch('http://10.0.2.2:3333/api/v0.0.5/chits?start=0&count=end')
         .then((response) => response.json())
         .then((responseJson) => {
           setIsLoading(false)
@@ -41,7 +71,7 @@ export default function HomeScreen ({ route, navigation }) {
           console.log(error)
         })
     } else {
-      fetch('http://10.0.2.2:3333/api/v0.0.5/chits?start=0&count=end',
+      return fetch('http://10.0.2.2:3333/api/v0.0.5/chits?start=0&count=end',
         {
           method: 'GET',
           headers: {
@@ -76,82 +106,21 @@ export default function HomeScreen ({ route, navigation }) {
       </View>
     )
   }
-
-  // return (
-  //   <View style={styles.container}>
-  //     <ScrollView
-  //       refreshControl={
-  //         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-  //       }
-  //     >
-  //       {chitData.map((item) => {
-  //         return (
-  //           <View key={item.chit_id}>
-  //             <Image
-  //               source={{ uri: 'http://10.0.2.2:3333/api/v0.0.5/chits/' + item.chit_id + '/photo' }}
-  //               style={styles.photo}
-  //             />
-  //             <Text style={styles.item}>
-  //               {item.user.given_name}
-  //               {'\n\n'}
-  //               {item.chit_content}
-  //             </Text>
-  //           </View>
-  //         )
-  //       })}
-  //     </ScrollView>
-  //   </View>
-  // )
-
   return (
-    <>
-      <View>
-        {/* <Header
-          leftComponent={{ icon: 'menu', size: 30, color: '#fff' }}
-          centerComponent={{ text: 'HOME', style: { color: '#fff', fontSize: 20 } }}
-          rightComponent={
-            <TouchableOpacity onPress={() => { navigation.navigate('Sign In') }}>
-              <View style={{
-                backgroundColor: 'white',
-                alignItems: 'center',
-                justifyContent: 'center',
-                borderRadius: 10,
-                padding: 5
-              }}
-              >
-                <Text>Sign In</Text>
-              </View>
-            </TouchableOpacity>}
-          containerStyle={styles.headerContainer}
-        /> */}
-      </View>
-      <View style={styles.container}>
-        <ScrollView
-          refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-          }
-        >
-          {chitData.map((item) => {
-            return (
-              <View key={item.chit_id}>
-                <Card
-                  title={item.user.given_name}
-                  titleStyle={{ textAlign: 'left', paddingLeft: 10 }}
-                  image={{ uri: 'http://10.0.2.2:3333/api/v0.0.5/chits/' + item.chit_id + '/photo' }}
-                  containerStyle={{ borderRadius: 5 }}
-                >
-                  <Text style={{ marginBottom: 10 }}>
-                    {getDate(item.timestamp)}
-                  </Text>
-                  <Text style={{ marginBottom: 10 }}>
-                    {item.chit_content}
-                  </Text>
-                </Card>
-              </View>
-            )
-          })}
-        </ScrollView>
-      </View>
-    </>
+    <View style={Styles.container}>
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
+        {chitData.map((item) => {
+          return (
+            <View key={item.chit_id}>
+              <Chit item={item} />
+            </View>
+          )
+        })}
+      </ScrollView>
+    </View>
   )
 }

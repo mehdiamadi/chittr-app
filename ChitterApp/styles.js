@@ -1,6 +1,9 @@
 import { StyleSheet } from 'react-native'
 
 const styles = StyleSheet.create({
+  capture: {
+    backgroundColor: '#000080'
+  },
   headerContainer: {
     marginTop: -50
   },
@@ -10,8 +13,7 @@ const styles = StyleSheet.create({
   },
   userContainer: {
     flex: 0,
-    //flexDirection: 'row',
-    alignItems: 'flex-start'
+    alignItems: 'center'
   },
   signInContainer: {
     flex: 1,

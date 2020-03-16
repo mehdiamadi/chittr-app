@@ -132,7 +132,7 @@ export default function ChittrApp () {
         />
         <Stack.Screen name='Sign In' component={SignInScreen} />
         <Stack.Screen name='Sign Up' component={SignUpScreen} />
-        <Stack.Screen name='User' component={UserScreen} initialParams={{ token: userToken }} />
+        <Stack.Screen name='User' component={UserScreen} />
         <Stack.Screen name='Post' component={CreateChitScreen} />
         <Stack.Screen name='Drafts' component={DraftsScreen} />
       </Stack.Navigator>
