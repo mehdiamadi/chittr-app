@@ -28,16 +28,6 @@ All of which can be installed by following [React Native Getting Started](https:
 4.  Save the config file and run `npm start`
 5.  You can test if the server is running by navigating to `http://localhost:3333/api/v0.0.5` in your browser, you should see `{"msg":"Server up"}`
 
-## Usage
-
-```python
-import foobar
-
-foobar.pluralize('word') # returns 'words'
-foobar.pluralize('goose') # returns 'geese'
-foobar.singularize('phenomena') # returns 'phenomenon'
-```
-
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
