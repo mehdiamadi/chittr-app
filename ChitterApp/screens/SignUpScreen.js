@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { TextInput, View, Button } from 'react-native'
-import Styles from '../Styles'
 const fetch = require('isomorphic-fetch')
 
 export default class SignUpScreen extends Component {
@@ -37,13 +36,13 @@ export default class SignUpScreen extends Component {
         <TextInput
           style={{ height: 40 }}
           placeholder='First Name'
-          onChangeText={(givenName) => this.setState({ givenName })}
+          onChangeText={(givenName) => this.setState({ given_name: givenName })}
           value={this.state.given_name}
         />
         <TextInput
           style={{ height: 40 }}
           placeholder='Surname'
-          onChangeText={(familyName) => this.setState({ familyName })}
+          onChangeText={(familyName) => this.setState({ family_name: familyName })}
           value={this.state.family_name}
         />
         <TextInput

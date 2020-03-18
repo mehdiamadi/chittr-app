@@ -1,7 +1,6 @@
 import React from 'react'
 import { View, ActivityIndicator, ScrollView } from 'react-native'
 import { Card, ListItem, SearchBar, Button } from 'react-native-elements'
-import Styles from '../Styles'
 const fetch = require('isomorphic-fetch')
 
 export default function SearchScreen ({ route, navigation }) {
@@ -17,6 +16,7 @@ export default function SearchScreen ({ route, navigation }) {
     getFollowing()
   }, [])
 
+  // Async function to search for a user
   const searchUser = async () => {
     setIsLoading(true)
     fetch('http://10.0.2.2:3333/api/v0.0.5/search_user?q=' + username)
@@ -30,6 +30,7 @@ export default function SearchScreen ({ route, navigation }) {
       })
   }
 
+  // Async function to get the following list of a user
   const getFollowing = async () => {
     fetch('http://10.0.2.2:3333/api/v0.0.5/user/' + userID + '/following')
       .then((response) => response.json())
@@ -44,25 +45,14 @@ export default function SearchScreen ({ route, navigation }) {
       })
   }
 
-  // const checkIsFollowing = (usernames) => {
-  //   for (var i = 0; i < Object.keys(usernames).length; i++) {
-  //     //console.log(usernames[i])
-  //     for (var j = 0; j < Object.keys(following).length; i++) {
-  //       if (following[i].user_id === usernames[i].user_id) {
-  //         setIsFollowing(true)
-  //       }
-  //     }
-  //   }
-  // }
-
+  // Function to check if the user in the search result is being followed by the signed in user
   const checkIsFollowing = (usernames, following) => {
-    var usernamesCopy = usernames
-    for (var i = 0; i < Object.keys(usernames).length; i++) {
-      if (following.length !== 0) {
-        for (var j = 0; j < Object.keys(following).length; j++) {
-          //console.log(following[j].user_id, usernames[i].user_id)
-          if (following[j].user_id === usernamesCopy[i].user_id) {
-            usernamesCopy[i].isFollowing = true
+    var usernamesCopy = usernames // Create copy of usernames
+    for (var i = 0; i < Object.keys(usernames).length; i++) { // Loop through each user in the search result
+      if (following.length !== 0) { // If the user is following other users
+        for (var j = 0; j < Object.keys(following).length; j++) { // Loop through each user in the user following list
+          if (following[j].user_id === usernamesCopy[i].user_id) { // If user in the search result matches a user in the following list
+            usernamesCopy[i].isFollowing = true // Set isFollowing property of the user to true
             break
           } else {
             usernamesCopy[i].isFollowing = false
@@ -72,10 +62,10 @@ export default function SearchScreen ({ route, navigation }) {
         usernamesCopy[i].isFollowing = false
       }
     }
-    setUsernames(usernamesCopy)
-    //console.log(usernames)
+    setUsernames(usernamesCopy) // Set usernames state to the updated usernames isFollowing properties
   }
 
+  // Async function to follow a user, takes method as a paramter to specify a follow or unfollow request
   const followUser = async (method, userID) => {
     fetch('http://10.0.2.2:3333/api/v0.0.5/user/' + userID + '/follow',
       {
@@ -87,14 +77,15 @@ export default function SearchScreen ({ route, navigation }) {
         })
       })
       .then((response) => {
-        getFollowing()
+        getFollowing() // Get new following list
 
         var temp = usernames
-        temp[getIndex(userID)].isFollowing = !temp[getIndex(userID)].isFollowing
+        temp[getIndex(userID)].isFollowing = !temp[getIndex(userID)].isFollowing // Changes the user's isFollowing property after the follow/unfollow reuqest to the opposite
         setUsernames(temp)
       })
   }
 
+  // Function that gets the index of a user in the usernames array using the userID
   const getIndex = (userID) => {
     for (var i = 0; i < Object.keys(usernames).length; i++) {
       if (userID === usernames[i].user_id) {
@@ -112,27 +103,12 @@ export default function SearchScreen ({ route, navigation }) {
   }
   return (
     <View>
-      {/* <Input
-        placeholder='Search Username'
-        leftIcon={
-          <Icon
-            type='font-awesome'
-            name='search'
-            size={24}
-            color='black'
-            iconStyle={styles.signInIcons}
-          />
-        }
-        onChangeText={(username) => this.setState({ username })}
-        value={this.state.username}
-        onSubmitEditing={this.searchUser()}
-      /> */}
       <SearchBar
         placeholder='Search Username...'
         onChangeText={(username) => setUsername(username)}
         value={username}
-        platform='android'
-        onSubmitEditing={() => { searchUser() }}
+        platform='android' // Search bar style type
+        onSubmitEditing={() => { searchUser() }} // Call searchUser function when enter is pressed on the keyboard
       />
       <ScrollView>
         {usernames.map((item) => {
@@ -151,7 +127,7 @@ export default function SearchScreen ({ route, navigation }) {
                       })
                     }}
                     rightElement={
-                      token !== null && item.user_id !== userID && usernames[getIndex(item.user_id)].isFollowing
+                      token !== null && item.user_id !== userID && usernames[getIndex(item.user_id)].isFollowing // If user is already followed
                         ? <Button
                           title='Unfollow'
                           onPress={() => followUser('DELETE', item.user_id)}
@@ -160,8 +136,8 @@ export default function SearchScreen ({ route, navigation }) {
                             borderRadius: 15,
                             padding: 5
                           }}
-                        />
-                        : (token != null && item.user_id !== userID && !usernames[getIndex(item.user_id)].isFollowing
+                          /> // eslint-disable-line indent
+                        : (token != null && item.user_id !== userID && !usernames[getIndex(item.user_id)].isFollowing // If user is not followed
                           ? <Button
                             title='Follow'
                             onPress={() => followUser('POST', item.user_id)}
@@ -170,9 +146,9 @@ export default function SearchScreen ({ route, navigation }) {
                               borderRadius: 15,
                               padding: 5
                             }}
-                          />
+                            /> // eslint-disable-line indent
                           : (null)
-                        )
+                    ) // eslint-disable-line indent
                     }
                     chevron
                   />

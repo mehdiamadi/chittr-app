@@ -7,15 +7,13 @@ const fetch = require('isomorphic-fetch')
 
 export default function LoginScreens ({ navigation }) {
   const { signIn } = React.useContext(AuthContext)
-  const [email, setEmail] = React.useState('j.smith@mail.com')
-  const [password, setPassword] = React.useState('password')
+  const [email, setEmail] = React.useState('')
+  const [password, setPassword] = React.useState('')
 
   const enabled = email.length > 0 && password.length > 0
+
+  // Async function to sign in by getting a token
   const getToken = async () => {
-    /* if (email == '' || password == '') {
-    Alert.alert('');
-    }
-    else { */
     fetch('http://10.0.2.2:3333/api/v0.0.5/login',
       {
         method: 'POST',
@@ -32,29 +30,15 @@ export default function LoginScreens ({ navigation }) {
       .then(response => response.json())
       .then(responseJson => {
         signIn(responseJson.token, responseJson.id)
-        // setToken(responseJson.token)
-        // setUserID(responseJson.id)
       })
       .catch((error) => {
         console.log(error)
         Alert.alert('Unable to sign in, check your details and try again')
       })
-    // }
   }
-
-  // if (token !== '' && userID !== '') {
-  //   signIn(token, userID)
-  // }
 
   return (
     <>
-      {/* <View>
-        <Header
-          leftComponent={{ icon: 'arrow-back', size: 30, color: '#fff' }}
-          centerComponent={{ text: 'SIGN IN', style: { color: '#fff', fontSize: 20 } }}
-          containerStyle={styles.headerContainer}
-        />
-      </View> */}
       <View style={Styles.signInContainer}>
         <Text h1 style={Styles.signInTitle}>Chittr</Text>
         <Input
@@ -76,10 +60,10 @@ export default function LoginScreens ({ navigation }) {
           leftIcon={
             <Icon
               type='font-awesome'
-              name='user'
-              size={24}
+              name='lock'
+              size={30}
               color='black'
-              iconStyle={{ paddingRight: 17 }}
+              iconStyle={{ paddingRight: 15 }}
             />
           }
           onChangeText={(password) => setPassword(password)}
@@ -87,7 +71,7 @@ export default function LoginScreens ({ navigation }) {
           secureTextEntry
         />
         <Button
-          disabled={!enabled}
+          disabled={!enabled} // If username and password fields are empty then disable button
           onPress={getToken}
           title='Sign In'
           type='solid'

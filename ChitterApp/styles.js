@@ -2,7 +2,8 @@ import { StyleSheet } from 'react-native'
 
 const styles = StyleSheet.create({
   capture: {
-    backgroundColor: '#000080'
+    fontSize: 16,
+    color: 'white'
   },
   headerContainer: {
     marginTop: -50
@@ -22,7 +23,7 @@ const styles = StyleSheet.create({
     padding: 10
   },
   signInIcons: {
-    paddingRight: 10
+    marginRight: 20
   },
   signInTitle: {
     alignSelf: 'center',
