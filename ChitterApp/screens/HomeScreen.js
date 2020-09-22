@@ -32,7 +32,7 @@ class Chit extends Component { // Component for chit
   // Function to get actual address from lat and long
   getLocation () {
     if (this.state.validLoc) {
-      fetch('https://maps.googleapis.com/maps/api/geocode/json?latlng=' + this.props.item.location.latitude + ',' + this.props.item.location.longitude + '&key=AIzaSyDiOm0596xwHMzZ0pqMAN3yxXj2BJpUum0') // Get address from google geocoder API
+      fetch('https://maps.googleapis.com/maps/api/geocode/json?latlng=' + this.props.item.location.latitude + ',' + this.props.item.location.longitude + '&key=INSERTKEY') // Get address from google geocoder API
         .then((response) => response.json())
         .then((responseJson) => {
           var location = responseJson.plus_code.compound_code
